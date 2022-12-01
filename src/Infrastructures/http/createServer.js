@@ -1,8 +1,12 @@
 const Hapi = require('@hapi/hapi');
 const ClientError = require('../../Commons/exceptions/ClientError');
 const DomainErrorTranslator = require('../../Commons/exceptions/DomainErrorTranslator');
+const Jwt = require('@hapi/jwt');
+
+// Plugin
 const users = require('../../Interfaces/http/api/users');
 const authentications = require('../../Interfaces/http/api/authentications');
+const threads = require('../../Interfaces/http/api/threads');
 
 const createServer = async (container) => {
   const server = Hapi.server({
@@ -10,6 +14,31 @@ const createServer = async (container) => {
     port: process.env.PORT,
   });
 
+  // Register External Plugin
+  await server.register([
+    {
+      plugin: Jwt
+    }
+  ])
+
+  // Define the authentication strategy jwt
+  server.auth.strategy('forumapi_jwt', 'jwt', {
+    keys: process.env.ACCESS_TOKEN_KEY,
+    verify: {
+      aud: false,
+      iss: false,
+      sub: false,
+      maxAgeSec: process.env.ACCESS_TOKEN_AGE,
+    },
+    validate: (artifacts) => ({
+      isValid: true,
+      credential: {
+        id: artifacts.decoded.payload.id,
+      },
+    }),
+  });
+
+  // Register Plugin
   await server.register([
     {
       plugin: users,
@@ -19,6 +48,10 @@ const createServer = async (container) => {
       plugin: authentications,
       options: { container },
     },
+    {
+      plugin: threads,
+      options: { container },
+    }
   ]);
 
   server.ext('onPreResponse', (request, h) => {
@@ -43,8 +76,6 @@ const createServer = async (container) => {
       if (!translatedError.isServer) {
         return h.continue;
       }
-
-      console.log(translatedError);
 
       // penanganan server error sesuai kebutuhan
       const newResponse = h.response({
