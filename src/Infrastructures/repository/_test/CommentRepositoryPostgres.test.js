@@ -91,7 +91,8 @@ describe('CommentRepositoryPostgres postgres', () => {
 
       // Assert
       const comments = await CommentsTableTestHelper.findCommentsById('comment-123');
-      expect(comments).toHaveLength(0);
+      expect(comments).toHaveLength(1);
+      expect(comments[0].is_delete).toBeTruthy();
     });
 
     it('should throw NotFoundError if comment not found', async () => {

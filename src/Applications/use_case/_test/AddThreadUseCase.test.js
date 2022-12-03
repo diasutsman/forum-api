@@ -1,7 +1,7 @@
 const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const AddThread = require('../../../Domains/threads/entities/AddThread');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
-const AddThreadUseCase = require('../AddThreadUseCase');
+const ThreadUseCase = require('../ThreadUseCase');
 
 describe('AddThreadUseCase', () => {
   /**
@@ -30,12 +30,12 @@ describe('AddThreadUseCase', () => {
         .mockImplementation(() => Promise.resolve(expectedAddedThread));
 
     /** creating use case instance */
-    const addThreadUseCase = new AddThreadUseCase({
+    const threadUseCase = new ThreadUseCase({
       threadRepository: mockThreadRepository,
     });
 
     // Action
-    const addedThread = await addThreadUseCase.execute(useCasePayload);
+    const addedThread = await threadUseCase.addThread(useCasePayload);
 
     // Assert
     expect(addedThread).toStrictEqual(expectedAddedThread);
