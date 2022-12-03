@@ -17,6 +17,7 @@ describe('AddThread entities', () => {
       title: 'title',
       body: 1234,
       owner: 'user-123',
+      date: ['2021-08-08T07:00:00.000Z'],
     };
 
     // Action & Assert
@@ -29,6 +30,7 @@ describe('AddThread entities', () => {
       title: 'title',
       body: 'body',
       owner: 'user-123',
+      date: new Date().toISOString(),
     };
 
     // Action
@@ -39,5 +41,6 @@ describe('AddThread entities', () => {
     expect(addThread.title).toEqual(payload.title);
     expect(addThread.body).toEqual(payload.body);
     expect(addThread.owner).toEqual(payload.owner);
+    expect(addThread.date).toEqual(payload.date);
   });
 });

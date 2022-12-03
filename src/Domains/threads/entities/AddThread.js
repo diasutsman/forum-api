@@ -4,7 +4,7 @@ class AddThread {
     this.title = payload.title;
     this.body = payload.body;
     this.owner = payload.owner;
-    
+    this.date = payload.date || new Date().toISOString();
   }
 
   _verifyPayload(payload) {

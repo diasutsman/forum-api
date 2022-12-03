@@ -14,6 +14,7 @@ describe('AddThreadUseCase', () => {
       title: 'title',
       body: 'body',
       owner: 'user-123',
+      date: new Date().toISOString(),
     };
     const expectedAddedThread = new AddedThread({
       id: 'thread-123',
@@ -42,6 +43,7 @@ describe('AddThreadUseCase', () => {
       title: useCasePayload.title,
       body: useCasePayload.body,
       owner: useCasePayload.owner,
+      date: useCasePayload.date,
     }));
   });
 });
