@@ -1,6 +1,8 @@
 const AddThreadUseCase = require('../../../../Applications/use_case/ThreadUseCase');
 const CommentUseCase = require('../../../../Applications/use_case/CommentUseCase');
 const ThreadUseCase = require('../../../../Applications/use_case/ThreadUseCase');
+const autoBind = require('auto-bind');
+const ReplyUseCase = require('../../../../Applications/use_case/ReplyUseCase');
 
 class ThreadsHandler {
   /**
@@ -8,11 +10,7 @@ class ThreadsHandler {
    */
   constructor(container) {
     this._container = container;
-
-    this.postThreadHandler = this.postThreadHandler.bind(this);
-    this.postCommentHandler = this.postCommentHandler.bind(this);
-    this.getThreadByIdHandler = this.getThreadByIdHandler.bind(this);
-    this.deleteThreadCommentByIdHandler = this.deleteThreadCommentByIdHandler.bind(this)
+    autoBind(this);
   }
 
   async postThreadHandler(request, h) {
@@ -77,7 +75,6 @@ class ThreadsHandler {
   async deleteThreadCommentByIdHandler(request) {
     const { threadId, commentId } = request.params;
     const { id: credentialId } = request.auth.credentials
-    console.log({ commentId, threadId, credentialId })
 
     /** @type {CommentUseCase} */
     const commentUseCase = this._container.getInstance(CommentUseCase.name);
@@ -86,6 +83,47 @@ class ThreadsHandler {
     return {
       status: 'success',
       message: 'berhasil menghapus komentar',
+    }
+  }
+
+  /**
+   * @param {import('@hapi/hapi').Request} request 
+   * @param {import('@hapi/hapi').ResponseToolkit} h 
+   */
+  async postReplyHandler(request, h) {
+    const { threadId, commentId } = request.params;
+    const { id: credentialId } = request.auth.credentials
+
+    /** @type {ReplyUseCase} */
+    const replyUseCase = this._container.getInstance(ReplyUseCase.name);
+    const addedReply = await replyUseCase.addReply({
+      ...request.payload,
+      owner: credentialId,
+      threadId,
+      commentId,
+    })
+
+    const response = h.response({
+      status: 'success',
+      data: {
+        addedReply,
+      },
+    });
+    response.code(201);
+    return response;
+  }
+
+  async deleteReplyHandler(request) {
+    const { threadId, commentId, replyId } = request.params;
+    const { id: credentialId } = request.auth.credentials
+
+    /** @type {ReplyUseCase} */
+    const replyUseCase = this._container.getInstance(ReplyUseCase.name);
+    await replyUseCase.deleteReply({ threadId, commentId, replyId, owner: credentialId })
+
+    return {
+      status: 'success',
+      message: 'berhasil menghapus balasan',
     }
   }
 }

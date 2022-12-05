@@ -29,6 +29,9 @@ const LogoutUserUseCase = require('../Applications/use_case/LogoutUserUseCase');
 const RefreshAuthenticationUseCase = require('../Applications/use_case/RefreshAuthenticationUseCase');
 const ThreadUseCase = require('../Applications/use_case/ThreadUseCase');
 const CommentUseCase = require('../Applications/use_case/CommentUseCase');
+const ReplyRepository = require('../Domains/replies/ReplyRepository');
+const ReplyRepositoryPostgres = require('./repository/ReplyRepositoryPostgres');
+const ReplyUseCase = require('../Applications/use_case/ReplyUseCase');
 
 // creating container
 const container = createContainer();
@@ -109,6 +112,20 @@ container.register([
         },
       ],
     },
+  },
+  {
+    key: ReplyRepository.name,
+    Class: ReplyRepositoryPostgres,
+    parameter: {
+      dependencies: [
+        {
+          concrete: pool,
+        },
+        {
+          concrete: nanoid,
+        }
+      ]
+    }
   }
 ]);
 
@@ -199,6 +216,10 @@ container.register([
         {
           name: 'commentRepository',
           internal: CommentRepository.name,
+        },
+        {
+          name: 'replyRepository',
+          internal: ReplyRepository.name,
         }
       ]
     }
@@ -209,6 +230,27 @@ container.register([
     parameter: {
       injectType: 'destructuring',
       dependencies: [
+        {
+          name: 'commentRepository',
+          internal: CommentRepository.name,
+        },
+        {
+          name: 'threadRepository',
+          internal: ThreadRepository.name,
+        }
+      ]
+    }
+  },
+  {
+    key: ReplyUseCase.name,
+    Class: ReplyUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'replyRepository',
+          internal: ReplyRepository.name,
+        },
         {
           name: 'commentRepository',
           internal: CommentRepository.name,
