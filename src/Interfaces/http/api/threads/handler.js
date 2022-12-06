@@ -1,18 +1,36 @@
-const AddThreadUseCase = require('../../../../Applications/use_case/ThreadUseCase');
-const CommentUseCase = require('../../../../Applications/use_case/CommentUseCase');
-const ThreadUseCase = require('../../../../Applications/use_case/ThreadUseCase');
+/**
+ * @typedef {import('../../../../Infrastructures/container')} Container
+ * @typedef {import('@hapi/hapi').Request} Request
+ * @typedef {import('@hapi/hapi').ResponseToolkit} ResponseToolkit
+ * @typedef {import('@hapi/hapi').ResponseObject} ResponseObject
+ */
+const AddThreadUseCase =
+require('../../../../Applications/use_case/ThreadUseCase');
+const CommentUseCase =
+require('../../../../Applications/use_case/CommentUseCase');
+const ThreadUseCase =
+require('../../../../Applications/use_case/ThreadUseCase');
 const autoBind = require('auto-bind');
 const ReplyUseCase = require('../../../../Applications/use_case/ReplyUseCase');
 
+/**
+ * @class ThreadsHandler
+ */
 class ThreadsHandler {
   /**
-   * @param {import('../../../../Infrastructures/container')} container
+   * @param {Container} container
    */
   constructor(container) {
     this._container = container;
     autoBind(this);
   }
 
+  /**
+   * @param {Request} request
+   * @param {ResponseToolkit} h
+   * @return {ResponseObject}
+   * @memberof ThreadsHandler
+   */
   async postThreadHandler(request, h) {
     const addThreadUseCase = this._container.getInstance(AddThreadUseCase.name);
     const addedThread = await addThreadUseCase.addThread({
@@ -30,6 +48,12 @@ class ThreadsHandler {
     return response;
   }
 
+  /**
+   * @param {Request} request
+   * @param {ResponseToolkit} h
+   * @return {ResponseObject}
+   * @memberof ThreadsHandler
+   */
   async postCommentHandler(request, h) {
     /** @type {CommentUseCase} */
     const commentUseCase = this._container.getInstance(CommentUseCase.name);
@@ -37,7 +61,7 @@ class ThreadsHandler {
       ...request.payload,
       owner: request.auth.credentials.id,
       threadId: request.params.threadId,
-    })
+    });
 
     const response = h.response({
       status: 'success',
@@ -50,49 +74,56 @@ class ThreadsHandler {
   }
 
   /**
-   * @param {import('@hapi/hapi').Request} request 
-   * @param {import('@hapi/hapi').ResponseToolkit} h 
+   * @param {Request} request
+   * @return {ResponseObject}
+   * @memberof ThreadsHandler
    */
   async getThreadByIdHandler(request) {
-
-    const { threadId: id } = request.params
+    const {threadId: id} = request.params;
     /** @type {ThreadUseCase} */
-    const threadUseCase = this._container.getInstance(ThreadUseCase.name)
-    const thread = await threadUseCase.getThreadById(id)
+    const threadUseCase = this._container.getInstance(ThreadUseCase.name);
+    const thread = await threadUseCase.getThreadById(id);
 
     return {
       status: 'success',
       data: {
         thread,
       },
-    }
+    };
   }
 
   /**
-   * @param {import('@hapi/hapi').Request} request 
-   * @param {import('@hapi/hapi').ResponseToolkit} h 
+   * @param {Request} request
+   * @return {ResponseObject}
+   * @memberof ThreadsHandler
    */
   async deleteThreadCommentByIdHandler(request) {
-    const { threadId, commentId } = request.params;
-    const { id: credentialId } = request.auth.credentials
+    const {threadId, commentId} = request.params;
+    const {id: credentialId} = request.auth.credentials;
 
     /** @type {CommentUseCase} */
     const commentUseCase = this._container.getInstance(CommentUseCase.name);
-    await commentUseCase.deleteComment({ commentId, threadId, owner: credentialId })
+    await commentUseCase.deleteComment({
+      commentId,
+      threadId,
+      owner: credentialId,
+    });
 
     return {
       status: 'success',
       message: 'berhasil menghapus komentar',
-    }
+    };
   }
 
   /**
-   * @param {import('@hapi/hapi').Request} request 
-   * @param {import('@hapi/hapi').ResponseToolkit} h 
+   * @param {Request} request
+   * @param {ResponseToolkit} h
+   * @return {ResponseObject}
+   * @memberof ThreadsHandler
    */
   async postReplyHandler(request, h) {
-    const { threadId, commentId } = request.params;
-    const { id: credentialId } = request.auth.credentials
+    const {threadId, commentId} = request.params;
+    const {id: credentialId} = request.auth.credentials;
 
     /** @type {ReplyUseCase} */
     const replyUseCase = this._container.getInstance(ReplyUseCase.name);
@@ -101,7 +132,7 @@ class ThreadsHandler {
       owner: credentialId,
       threadId,
       commentId,
-    })
+    });
 
     const response = h.response({
       status: 'success',
@@ -113,18 +144,28 @@ class ThreadsHandler {
     return response;
   }
 
+  /**
+   * @param {Request} request
+   * @return {ResponseObject}
+   * @memberof ThreadsHandler
+   */
   async deleteReplyHandler(request) {
-    const { threadId, commentId, replyId } = request.params;
-    const { id: credentialId } = request.auth.credentials
+    const {threadId, commentId, replyId} = request.params;
+    const {id: credentialId} = request.auth.credentials;
 
     /** @type {ReplyUseCase} */
     const replyUseCase = this._container.getInstance(ReplyUseCase.name);
-    await replyUseCase.deleteReply({ threadId, commentId, replyId, owner: credentialId })
+    await replyUseCase.deleteReply({
+      threadId,
+      commentId,
+      replyId,
+      owner: credentialId,
+    });
 
     return {
       status: 'success',
       message: 'berhasil menghapus balasan',
-    }
+    };
   }
 }
 module.exports = ThreadsHandler;

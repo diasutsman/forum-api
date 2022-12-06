@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-exports.up = pgm => {
+exports.up = (pgm) => {
   pgm.createTable('comments', {
     id: {
       type: 'VARCHAR(50)',
@@ -26,11 +26,11 @@ exports.up = pgm => {
 
   // add thread_id as foreign key to thread id
   pgm.addConstraint('comments',
-    'fk_comments.thread_id_threads.id',
-    'FOREIGN KEY(thread_id) REFERENCES threads(id) ON DELETE CASCADE',
-  )
+      'fk_comments.thread_id_threads.id',
+      'FOREIGN KEY(thread_id) REFERENCES threads(id) ON DELETE CASCADE',
+  );
 };
 
-exports.down = pgm => { 
+exports.down = (pgm) => {
   pgm.dropTable('comments');
 };

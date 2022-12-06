@@ -1,4 +1,4 @@
-const AddReply = require('../AddReply')
+const AddReply = require('../AddReply');
 
 describe('AddReply entities', () => {
   it('should throw error when payload not contain needed property', () => {
@@ -10,7 +10,8 @@ describe('AddReply entities', () => {
     };
 
     // Action & Assert
-    expect(() => new AddReply(payload)).toThrowError('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddReply(payload))
+        .toThrowError('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when payload not meet data type specification', () => {
@@ -20,11 +21,11 @@ describe('AddReply entities', () => {
       commentId: 'comment-123',
       content: 'content',
       owner: 123,
-    }
+    };
 
     // Action & Assert
-    expect(() => new AddReply(payload)).toThrowError('ADD_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
-
+    expect(() => new AddReply(payload))
+        .toThrowError('ADD_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create AddReply entities correctly', () => {
@@ -35,7 +36,7 @@ describe('AddReply entities', () => {
       content: 'content',
       owner: 'user-123',
       date: new Date().toISOString(),
-    }
+    };
 
     // Action
     const addReply = new AddReply(payload);

@@ -1,4 +1,16 @@
+/**
+ * @class RegisterUser
+ */
 class RegisterUser {
+  /**
+   * Creates an instance of RegisterUser.
+   * @param {{
+   *  username: string,
+   *  password: string,
+   *  fullname: string,
+   * }} payload
+   * @memberof RegisterUser
+   */
   constructor(payload) {
     this._verifyPayload(payload);
 
@@ -9,12 +21,24 @@ class RegisterUser {
     this.fullname = fullname;
   }
 
+  /**
+   * @param {{
+   *  username: string,
+   *  password: string,
+   *  fullname: string,
+   * }} payload
+   * @memberof RegisterUser
+   */
   _verifyPayload({username, password, fullname}) {
     if (!username || !password || !fullname) {
       throw new Error('REGISTER_USER.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    if (typeof username !== 'string' || typeof password !== 'string' || typeof fullname !== 'string') {
+    if (
+      typeof username !== 'string' ||
+      typeof password !== 'string' ||
+      typeof fullname !== 'string'
+    ) {
       throw new Error('REGISTER_USER.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
 
@@ -22,7 +46,7 @@ class RegisterUser {
       throw new Error('REGISTER_USER.USERNAME_LIMIT_CHAR');
     }
 
-    if (!username.match(/^[\w]+$/)) {
+    if (!username.match(/^\w+$/)) {
       throw new Error('REGISTER_USER.USERNAME_CONTAIN_RESTRICTED_CHARACTER');
     }
   }

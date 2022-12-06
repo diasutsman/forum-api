@@ -1,6 +1,7 @@
 const Hapi = require('@hapi/hapi');
 const ClientError = require('../../Commons/exceptions/ClientError');
-const DomainErrorTranslator = require('../../Commons/exceptions/DomainErrorTranslator');
+const DomainErrorTranslator =
+require('../../Commons/exceptions/DomainErrorTranslator');
 const Jwt = require('@hapi/jwt');
 
 // Plugin
@@ -17,9 +18,9 @@ const createServer = async (container) => {
   // Register External Plugin
   await server.register([
     {
-      plugin: Jwt
-    }
-  ])
+      plugin: Jwt,
+    },
+  ]);
 
   // Define the authentication strategy jwt
   server.auth.strategy('forumapi_jwt', 'jwt', {
@@ -42,21 +43,21 @@ const createServer = async (container) => {
   await server.register([
     {
       plugin: users,
-      options: { container },
+      options: {container},
     },
     {
       plugin: authentications,
-      options: { container },
+      options: {container},
     },
     {
       plugin: threads,
-      options: { container },
-    }
+      options: {container},
+    },
   ]);
 
   server.ext('onPreResponse', (request, h) => {
     // mendapatkan konteks response dari request
-    const { response } = request;
+    const {response} = request;
 
     if (response instanceof Error) {
       // bila response tersebut error, tangani sesuai kebutuhan
@@ -72,12 +73,13 @@ const createServer = async (container) => {
         return newResponse;
       }
 
-      // mempertahankan penanganan client error oleh hapi secara native, seperti 404, etc.
+      // mempertahankan penanganan client error
+      // oleh hapi secara native, seperti 404, etc.
       if (!translatedError.isServer) {
         return h.continue;
       }
 
-      console.log({ response })
+      console.log({response});
 
       // penanganan server error sesuai kebutuhan
       const newResponse = h.response({
@@ -88,7 +90,8 @@ const createServer = async (container) => {
       return newResponse;
     }
 
-    // jika bukan error, lanjutkan dengan response sebelumnya (tanpa terintervensi)
+    // jika bukan error, lanjutkan dengan response sebelumnya
+    // (tanpa terintervensi)
     return h.continue;
   });
 

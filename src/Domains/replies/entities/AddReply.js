@@ -1,3 +1,8 @@
+/**
+ *
+ *
+ * @class AddReply
+ */
 class AddReply {
   /**
    * @param {{
@@ -8,8 +13,8 @@ class AddReply {
    * }} payload
    */
   constructor(payload) {
-    this._verifyPayload(payload)
-    const { threadId, commentId, content, owner, date } = payload;
+    this._verifyPayload(payload);
+    const {threadId, commentId, content, owner, date} = payload;
 
     this.threadId = threadId;
     this.commentId = commentId;
@@ -18,12 +23,26 @@ class AddReply {
     this.date = date || new Date().toISOString();
   }
 
-  _verifyPayload({ threadId, commentId, content, owner }) {
+  /**
+   * @param {{
+   *  threadId: string,
+   *  commentId: string,
+   *  content: string,
+   *  owner: string,
+   * }} payload
+   * @memberof AddReply
+   */
+  _verifyPayload({threadId, commentId, content, owner}) {
     if (!threadId || !commentId || !content || !owner) {
       throw new Error('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    if (typeof threadId !== 'string' || typeof commentId !== 'string' || typeof content !== 'string' || typeof owner !== 'string') {
+    if (
+      typeof threadId !== 'string' ||
+      typeof commentId !== 'string' ||
+      typeof content !== 'string' ||
+      typeof owner !== 'string'
+    ) {
       throw new Error('ADD_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }

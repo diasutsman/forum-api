@@ -1,4 +1,15 @@
+/**
+ * @class UserLogin
+ */
 class UserLogin {
+  /**
+   * Creates an instance of UserLogin.
+   * @param {{
+   *  username: string,
+   *  password: string,
+   * }} payload
+   * @memberof UserLogin
+   */
   constructor(payload) {
     this._verifyPayload(payload);
 
@@ -6,6 +17,13 @@ class UserLogin {
     this.password = payload.password;
   }
 
+  /**
+   * @param {{
+   *  username: string,
+   *  password: string,
+   * }} payload
+   * @memberof UserLogin
+   */
   _verifyPayload(payload) {
     const {username, password} = payload;
 

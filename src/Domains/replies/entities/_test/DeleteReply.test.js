@@ -1,4 +1,4 @@
-const DeleteReply = require('../DeleteReply')
+const DeleteReply = require('../DeleteReply');
 
 describe('DeleteReply entities', () => {
   it('should throw error when payload not contain needed property', () => {
@@ -10,7 +10,8 @@ describe('DeleteReply entities', () => {
     };
 
     // Action & Assert
-    expect(() => new DeleteReply(payload)).toThrowError('DELETE_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new DeleteReply(payload))
+        .toThrowError('DELETE_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when payload not meet data type specification', () => {
@@ -20,11 +21,11 @@ describe('DeleteReply entities', () => {
       commentId: 'comment-123',
       replyId: 123,
       owner: true,
-    }
+    };
 
     // Action & Assert
-    expect(() => new DeleteReply(payload)).toThrowError('DELETE_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
-
+    expect(() => new DeleteReply(payload))
+        .toThrowError('DELETE_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create DeleteReply entities correctly', () => {
@@ -34,7 +35,7 @@ describe('DeleteReply entities', () => {
       commentId: 'comment-123',
       replyId: 'reply-123',
       owner: 'user-123',
-    }
+    };
 
     // Action
     const deleteReply = new DeleteReply(payload);

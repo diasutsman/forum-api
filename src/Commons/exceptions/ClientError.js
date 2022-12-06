@@ -1,4 +1,16 @@
+/**
+ *
+ *
+ * @class ClientError
+ * @extends {Error}
+ */
 class ClientError extends Error {
+  /**
+   * Creates an instance of ClientError.
+   * @param {string} message
+   * @param {number} [statusCode=400]
+   * @memberof ClientError
+   */
   constructor(message, statusCode = 400) {
     super(message);
 

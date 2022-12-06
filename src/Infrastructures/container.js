@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 
-const { createContainer } = require('instances-container');
+const {createContainer} = require('instances-container');
 
 // external agency
-const { nanoid } = require('nanoid');
+const {nanoid} = require('nanoid');
 const bcrypt = require('bcrypt');
 const Jwt = require('@hapi/jwt');
 const pool = require('./database/postgres/pool');
@@ -14,19 +14,25 @@ const PasswordHash = require('../Applications/security/PasswordHash');
 const UserRepositoryPostgres = require('./repository/UserRepositoryPostgres');
 const BcryptPasswordHash = require('./security/BcryptPasswordHash');
 const ThreadRepository = require('../Domains/threads/ThreadRepository');
-const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres');
-const CommentRepository = require('../Domains/comments/CommentRepository')
-const CommentRepositoryPostgres = require('../Infrastructures/repository/CommentRepositoryPostgres')
+const ThreadRepositoryPostgres =
+    require('./repository/ThreadRepositoryPostgres');
+const CommentRepository = require('../Domains/comments/CommentRepository');
+const CommentRepositoryPostgres =
+    require('../Infrastructures/repository/CommentRepositoryPostgres');
 
 // use case
 const AddUserUseCase = require('../Applications/use_case/AddUserUseCase');
-const AuthenticationTokenManager = require('../Applications/security/AuthenticationTokenManager');
+const AuthenticationTokenManager =
+    require('../Applications/security/AuthenticationTokenManager');
 const JwtTokenManager = require('./security/JwtTokenManager');
 const LoginUserUseCase = require('../Applications/use_case/LoginUserUseCase');
-const AuthenticationRepository = require('../Domains/authentications/AuthenticationRepository');
-const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRepositoryPostgres');
+const AuthenticationRepository =
+    require('../Domains/authentications/AuthenticationRepository');
+const AuthenticationRepositoryPostgres =
+    require('./repository/AuthenticationRepositoryPostgres');
 const LogoutUserUseCase = require('../Applications/use_case/LogoutUserUseCase');
-const RefreshAuthenticationUseCase = require('../Applications/use_case/RefreshAuthenticationUseCase');
+const RefreshAuthenticationUseCase =
+    require('../Applications/use_case/RefreshAuthenticationUseCase');
 const ThreadUseCase = require('../Applications/use_case/ThreadUseCase');
 const CommentUseCase = require('../Applications/use_case/CommentUseCase');
 const ReplyRepository = require('../Domains/replies/ReplyRepository');
@@ -123,10 +129,10 @@ container.register([
         },
         {
           concrete: nanoid,
-        }
-      ]
-    }
-  }
+        },
+      ],
+    },
+  },
 ]);
 
 // registering use cases
@@ -220,9 +226,9 @@ container.register([
         {
           name: 'replyRepository',
           internal: ReplyRepository.name,
-        }
-      ]
-    }
+        },
+      ],
+    },
   },
   {
     key: CommentUseCase.name,
@@ -237,9 +243,9 @@ container.register([
         {
           name: 'threadRepository',
           internal: ThreadRepository.name,
-        }
-      ]
-    }
+        },
+      ],
+    },
   },
   {
     key: ReplyUseCase.name,
@@ -258,10 +264,10 @@ container.register([
         {
           name: 'threadRepository',
           internal: ThreadRepository.name,
-        }
-      ]
-    }
-  }
+        },
+      ],
+    },
+  },
 ]);
 
 module.exports = container;

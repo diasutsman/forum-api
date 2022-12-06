@@ -1,8 +1,11 @@
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
-const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
-const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
+const CommentsTableTestHelper =
+require('../../../../tests/CommentsTableTestHelper');
+const ThreadsTableTestHelper =
+require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
-const RepliesTableTestHelper = require('../../../../tests/RepliesTableTestHelper');
+const RepliesTableTestHelper =
+require('../../../../tests/RepliesTableTestHelper');
 const pool = require('../../database/postgres/pool');
 const ReplyRepositoryPostgres = require('../ReplyRepositoryPostgres');
 const AddReply = require('../../../Domains/replies/entities/AddReply');
@@ -14,45 +17,50 @@ describe('ReplyRepositoryPostgres postgres', () => {
     await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
-    await RepliesTableTestHelper.cleanTable()
+    await RepliesTableTestHelper.cleanTable();
   });
 
   beforeEach(async () => {
     await UsersTableTestHelper.addUser({
       id: 'user-123',
-    })
+    });
     await ThreadsTableTestHelper.addThread({
       id: 'thread-123',
       owner: 'user-123',
     });
     await CommentsTableTestHelper.addComment({
       id: 'comment-123',
-    })
-  })
+    });
+  });
 
   afterAll(async () => {
     await pool.end();
   });
 
   describe('addReply function', () => {
-    it('should persist add reply and return added reply correctly', async () => {
-      // Arrange
-      const addReply = new AddReply({
-        content: 'content',
-        owner: 'user-123',
-        threadId: 'thread-123',
-        commentId: 'comment-123',
-      });
-      const fakeIdGenerator = () => '123';
-      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator);
+    it('should persist add reply and return added reply correctly',
+        async () => {
+          // Arrange
+          const addReply = new AddReply({
+            content: 'content',
+            owner: 'user-123',
+            threadId: 'thread-123',
+            commentId: 'comment-123',
+          });
+          const fakeIdGenerator = () => '123';
+          const replyRepositoryPostgres = new ReplyRepositoryPostgres(
+              pool,
+              fakeIdGenerator,
+          );
 
-      // Action
-      await replyRepositoryPostgres.addReply(addReply);
+          // Action
+          await replyRepositoryPostgres.addReply(addReply);
 
-      // Assert
-      const comments = await RepliesTableTestHelper.findRepliesById('reply-123');
-      expect(comments).toHaveLength(1);
-    });
+          // Assert
+          const comments = await RepliesTableTestHelper
+              .findRepliesById('reply-123');
+          expect(comments).toHaveLength(1);
+        });
 
     it('should return added comment correctly', async () => {
       // Arrange
@@ -63,7 +71,10 @@ describe('ReplyRepositoryPostgres postgres', () => {
         commentId: 'comment-123',
       });
       const fakeIdGenerator = () => '123'; // stub!
-      const commentRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator);
+      const commentRepositoryPostgres = new ReplyRepositoryPostgres(
+          pool,
+          fakeIdGenerator,
+      );
 
       // Action
       const addedReply = await commentRepositoryPostgres.addReply(addReply);
@@ -95,7 +106,8 @@ describe('ReplyRepositoryPostgres postgres', () => {
       await replyRepositoryPostgres.deleteReply(deleteReply);
 
       // Assert
-      const comments = await RepliesTableTestHelper.findRepliesById('reply-123');
+      const comments = await RepliesTableTestHelper
+          .findRepliesById('reply-123');
       expect(comments).toHaveLength(1);
       expect(comments[0].is_delete).toBeTruthy();
     });
@@ -111,7 +123,8 @@ describe('ReplyRepositoryPostgres postgres', () => {
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       // Action and Assert
-      await expect(replyRepositoryPostgres.deleteReply(deleteComment)).rejects.toThrowError(NotFoundError);
+      await expect(replyRepositoryPostgres.deleteReply(deleteComment))
+          .rejects.toThrowError(NotFoundError);
     });
   });
 });

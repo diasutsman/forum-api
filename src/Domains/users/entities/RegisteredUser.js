@@ -1,4 +1,16 @@
+/**
+ * @class RegisteredUser
+ */
 class RegisteredUser {
+  /**
+   * Creates an instance of RegisteredUser.
+   * @param {{
+   *  id: string,
+   *  username: string,
+   *  fullname: string,
+   * }} payload
+   * @memberof RegisteredUser
+   */
   constructor(payload) {
     this._verifyPayload(payload);
 
@@ -9,12 +21,24 @@ class RegisteredUser {
     this.fullname = fullname;
   }
 
+  /**
+   * @param {{
+   *  id: string,
+   *  username: string,
+   *  fullname: string,
+   * }} payload
+   * @memberof RegisteredUser
+   */
   _verifyPayload({id, username, fullname}) {
     if (!id || !username || !fullname) {
       throw new Error('REGISTERED_USER.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    if (typeof id !== 'string' || typeof username !== 'string' || typeof fullname !== 'string') {
+    if (
+      typeof id !== 'string' ||
+      typeof username !== 'string' ||
+      typeof fullname !== 'string'
+    ) {
       throw new Error('REGISTERED_USER.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }

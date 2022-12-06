@@ -1,4 +1,15 @@
+/**
+ * @class NewAuth
+ */
 class NewAuth {
+  /**
+   * Creates an instance of NewAuth.
+   * @param {{
+   *  accessToken: string,
+   *  refreshToken: string
+   * }} payload
+   * @memberof NewAuth
+   */
   constructor(payload) {
     this._verifyPayload(payload);
 
@@ -6,6 +17,13 @@ class NewAuth {
     this.refreshToken = payload.refreshToken;
   }
 
+  /**
+   * @param {{
+   *  accessToken: string,
+   *  refreshToken: string
+   * }} payload
+   * @memberof NewAuth
+   */
   _verifyPayload(payload) {
     const {accessToken, refreshToken} = payload;
 

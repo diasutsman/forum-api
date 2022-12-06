@@ -1,4 +1,17 @@
+/**
+ * @class AddThread
+ */
 class AddThread {
+  /**
+   * Creates an instance of AddThread.
+   * @param {{
+   *  title: string,
+   *  body: string,
+   *  owner: string,
+   *  date: string?,
+   * }} payload
+   * @memberof AddThread
+   */
   constructor(payload) {
     this._verifyPayload(payload);
     this.title = payload.title;
@@ -7,15 +20,29 @@ class AddThread {
     this.date = payload.date || new Date().toISOString();
   }
 
+  /**
+   *
+   * @param {{
+   *  title: string,
+   *  body: string,
+   *  owner: string,
+   *  date: string?,
+   * }} payload
+   * @memberof AddThread
+   */
   _verifyPayload(payload) {
-    const { title, body, owner } = payload;
+    const {title, body, owner} = payload;
     if (!title || !body || !owner) {
       throw new Error('ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     }
-    if (typeof title !== 'string' || typeof body !== 'string' || typeof owner !== 'string') {
+    if (
+      typeof title !== 'string' ||
+      typeof body !== 'string' ||
+      typeof owner !== 'string'
+    ) {
       throw new Error('ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }
 }
 
-module.exports = AddThread
+module.exports = AddThread;

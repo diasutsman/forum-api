@@ -1,9 +1,11 @@
 const pool = require('../../database/postgres/pool');
 const container = require('../../container');
 const createServer = require('../createServer');
-const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
-const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper')
-const AuthenticationTokenManager = require('../../../Applications/security/AuthenticationTokenManager');
+const ThreadsTableTestHelper =
+require('../../../../tests/ThreadsTableTestHelper');
+const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
+const AuthenticationTokenManager =
+require('../../../Applications/security/AuthenticationTokenManager');
 
 describe('/threads endpoint', () => {
   afterAll(async () => {
@@ -18,12 +20,14 @@ describe('/threads endpoint', () => {
   describe('when POST /threads', () => {
     it('should response 201 and persisted threads', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'dias' })
+      await UsersTableTestHelper.addUser({id: 'user-123', username: 'dias'});
       const requestPayload = {
         title: 'title',
         body: 'body',
       };
-      const token = await container.getInstance(AuthenticationTokenManager.name).createAccessToken({ id: 'user-123', username: 'dias' });
+      const token = await container
+          .getInstance(AuthenticationTokenManager.name)
+          .createAccessToken({id: 'user-123', username: 'dias'});
       // eslint-disable-next-line no-undef
       const server = await createServer(container);
 
@@ -34,7 +38,7 @@ describe('/threads endpoint', () => {
         payload: requestPayload,
         headers: {
           Authorization: `Bearer ${token}`,
-        }
+        },
       });
 
       // Assert
@@ -44,34 +48,49 @@ describe('/threads endpoint', () => {
       expect(responseJson.data.addedThread).toBeDefined();
     });
 
-    it('should response 400 when request payload not contain needed property', async () => {
-      // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'dias' })
-      const requestPayload = {
-        title: 'title',
-      };
-      const server = await createServer(container);
+    it('should response 400 when request payload not contain needed property',
+        async () => {
+          // Arrange
+          await UsersTableTestHelper.addUser({
+            id: 'user-123',
+            username: 'dias',
+          });
+          const requestPayload = {
+            title: 'title',
+          };
+          const server = await createServer(container);
 
-      // Action
-      const response = await server.inject({
-        method: 'POST',
-        url: '/threads',
-        payload: requestPayload,
-        headers: {
-          Authorization: `Bearer ${await container.getInstance(AuthenticationTokenManager.name).createAccessToken({ id: 'user-123', username: 'dias' })}`,
-        }
+          // Action
+          const response = await server.inject({
+            method: 'POST',
+            url: '/threads',
+            payload: requestPayload,
+            headers: {
+              Authorization: `Bearer ${await container
+                  .getInstance(AuthenticationTokenManager.name)
+                  .createAccessToken({id: 'user-123', username: 'dias'})
+              }`,
+            },
+          });
+
+          // Assert
+          const responseJson = JSON.parse(response.payload);
+          expect(response.statusCode).toEqual(400);
+          expect(responseJson.status).toEqual('fail');
+          expect(responseJson.message)
+              .toEqual(
+                  'tidak dapat membuat thread baru karena properti yang '+
+                  'dibutuhkan tidak ada',
+              );
+        });
+
+    it('should response 400 when request payload not meet '+
+    'data type specification', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({
+        id: 'user-123',
+        username: 'dias',
       });
-
-      // Assert
-      const responseJson = JSON.parse(response.payload);
-      expect(response.statusCode).toEqual(400);
-      expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('tidak dapat membuat thread baru karena properti yang dibutuhkan tidak ada');
-    });
-
-    it('should response 400 when request payload not meet data type specification', async () => {
-      // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'dias' })
       const requestPayload = {
         title: 'title',
         body: ['body'],
@@ -84,31 +103,38 @@ describe('/threads endpoint', () => {
         url: '/threads',
         payload: requestPayload,
         headers: {
-          Authorization: `Bearer ${await container.getInstance(AuthenticationTokenManager.name).createAccessToken({ id: 'user-123', username: 'dias' })}`,
-        }
+          Authorization: `Bearer ${await container
+              .getInstance(AuthenticationTokenManager.name)
+              .createAccessToken({id: 'user-123', username: 'dias'})
+          }`,
+        },
       });
 
       // Assert
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('tidak dapat membuat thread baru karena tipe data tidak sesuai');
+      expect(responseJson.message)
+          .toEqual(
+              'tidak dapat membuat thread baru karena tipe data tidak sesuai',
+          );
     });
 
-    it('should response 401 when request payload do not have authorization', async () => {
-      // Arrange
-      const server = await createServer(container);
+    it('should response 401 when request payload do not have authorization',
+        async () => {
+          // Arrange
+          const server = await createServer(container);
 
-      // Action
-      const response = await server.inject({
-        method: 'POST',
-        url: '/threads',
-      });
+          // Action
+          const response = await server.inject({
+            method: 'POST',
+            url: '/threads',
+          });
 
-      // Assert
-      const responseJson = JSON.parse(response.payload);
-      expect(response.statusCode).toEqual(401);
-      expect(responseJson.message).toEqual('Missing authentication');
-    });
+          // Assert
+          const responseJson = JSON.parse(response.payload);
+          expect(response.statusCode).toEqual(401);
+          expect(responseJson.message).toEqual('Missing authentication');
+        });
   });
 });

@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-exports.up = pgm => {
+exports.up = (pgm) => {
   pgm.createTable('replies', {
     id: {
       type: 'VARCHAR(50)',
@@ -28,12 +28,12 @@ exports.up = pgm => {
     },
     is_delete: {
       type: 'BOOLEAN',
-    }
-  })
+    },
+  });
 
-  pgm.sql('ALTER TABLE replies ALTER COLUMN is_delete set default false')
+  pgm.sql('ALTER TABLE replies ALTER COLUMN is_delete set default false');
 };
 
-exports.down = pgm => {
+exports.down = (pgm) => {
   pgm.dropTable('replies');
 };

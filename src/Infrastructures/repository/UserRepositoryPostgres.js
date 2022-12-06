@@ -1,14 +1,35 @@
+/**
+ * @typedef {import('../../Infrastructures/database/postgres/pool')} Pool
+ * @typedef {import('nanoid')} nanoid
+ * @typedef {import('../../Domains/users/entities/RegisterUser')} RegisterUser
+ * @typedef {import('../../Domains/users/entities/RegisteredUser')
+ * } RegisteredUser
+ */
 const InvariantError = require('../../Commons/exceptions/InvariantError');
 const RegisteredUser = require('../../Domains/users/entities/RegisteredUser');
 const UserRepository = require('../../Domains/users/UserRepository');
 
+/**
+ * @class UserRepositoryPostgres
+ * @extends {UserRepository}
+ */
 class UserRepositoryPostgres extends UserRepository {
+  /**
+   * Creates an instance of UserRepositoryPostgres.
+   * @param {Pool} pool
+   * @param {nanoid} idGenerator
+   * @memberof UserRepositoryPostgres
+   */
   constructor(pool, idGenerator) {
     super();
     this._pool = pool;
     this._idGenerator = idGenerator;
   }
 
+  /**
+   * @param {string} username
+   * @memberof UserRepositoryPostgres
+   */
   async verifyAvailableUsername(username) {
     const query = {
       text: 'SELECT username FROM users WHERE username = $1',
@@ -22,12 +43,20 @@ class UserRepositoryPostgres extends UserRepository {
     }
   }
 
+  /**
+   * @param {RegisterUser} registerUser
+   * @return {RegisteredUser}
+   * @memberof UserRepositoryPostgres
+   */
   async addUser(registerUser) {
     const {username, password, fullname} = registerUser;
     const id = `user-${this._idGenerator()}`;
 
     const query = {
-      text: 'INSERT INTO users VALUES($1, $2, $3, $4) RETURNING id, username, fullname',
+      text: `
+        INSERT INTO users VALUES($1, $2, $3, $4) 
+        RETURNING id, username, fullname
+      `,
       values: [id, username, password, fullname],
     };
 
@@ -36,6 +65,13 @@ class UserRepositoryPostgres extends UserRepository {
     return new RegisteredUser({...result.rows[0]});
   }
 
+  /**
+   * @param {string} username
+   * @return {{
+   *  password: string,
+   * }}
+   * @memberof UserRepositoryPostgres
+   */
   async getPasswordByUsername(username) {
     const query = {
       text: 'SELECT password FROM users WHERE username = $1',
@@ -51,6 +87,11 @@ class UserRepositoryPostgres extends UserRepository {
     return result.rows[0].password;
   }
 
+  /**
+   * @param {string} username
+   * @return {string}
+   * @memberof UserRepositoryPostgres
+   */
   async getIdByUsername(username) {
     const query = {
       text: 'SELECT id FROM users WHERE username = $1',

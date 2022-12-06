@@ -1,7 +1,12 @@
 /**
- * 
- * @param {import('./handler')} handler
- * @returns {import('@hapi/hapi').ServerRoute}
+ * @typedef {import('./handler')} ThreadsHandler
+ * @typedef {import('@hapi/hapi').ServerRoute} ServerRoute
+ */
+
+/**
+ *
+ * @param {ThreadsHandler} handler
+ * @return {ServerRoute[]}
  */
 const routes = (handler) => ([
   {
@@ -18,7 +23,7 @@ const routes = (handler) => ([
     handler: handler.postCommentHandler,
     options: {
       auth: 'forumapi_jwt',
-    }
+    },
   },
   {
     method: 'GET',
@@ -31,7 +36,7 @@ const routes = (handler) => ([
     handler: handler.deleteThreadCommentByIdHandler,
     options: {
       auth: 'forumapi_jwt',
-    }
+    },
   },
   {
     method: 'POST',
@@ -39,7 +44,7 @@ const routes = (handler) => ([
     handler: handler.postReplyHandler,
     options: {
       auth: 'forumapi_jwt',
-    }
+    },
   },
   {
     method: 'DELETE',
@@ -47,8 +52,8 @@ const routes = (handler) => ([
     handler: handler.deleteReplyHandler,
     options: {
       auth: 'forumapi_jwt',
-    }
-  }
+    },
+  },
 ]);
 
 module.exports = routes;

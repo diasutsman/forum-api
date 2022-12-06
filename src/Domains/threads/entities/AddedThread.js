@@ -1,4 +1,16 @@
+/**
+ * @class AddedThread
+ */
 class AddedThread {
+  /**
+   * Creates an instance of AddedThread.
+   * @param {{
+   *  id: string,
+   *  title: string,
+   *  owner: string,
+   * }} payload
+   * @memberof AddedThread
+   */
   constructor(payload) {
     this._verifyPayload(payload);
     this.id = payload.id;
@@ -6,15 +18,27 @@ class AddedThread {
     this.owner = payload.owner;
   }
 
+  /**
+   * @param {{
+   *  id: string,
+   *  title: string,
+   *  owner: string,
+   * }} payload
+   * @memberof AddedThread
+   */
   _verifyPayload(payload) {
-    const { id, title, owner } = payload;
+    const {id, title, owner} = payload;
     if (!id || !title || !owner) {
       throw new Error('ADDED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     }
-    if (typeof id !== 'string' || typeof title !== 'string' || typeof owner !== 'string') {
+    if (
+      typeof id !== 'string' ||
+      typeof title !== 'string' ||
+      typeof owner !== 'string'
+    ) {
       throw new Error('ADDED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }
 }
 
-module.exports = AddedThread
+module.exports = AddedThread;

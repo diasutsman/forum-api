@@ -1,3 +1,7 @@
+/**
+ * @typedef {import('../../Domains/users/UserRepository')} UserRepository
+ * @typedef {import('../../Applications/security/PasswordHash')} PasswordHash
+ */
 const RegisterUser = require('../../Domains/users/entities/RegisterUser');
 
 /**
@@ -5,17 +9,27 @@ const RegisterUser = require('../../Domains/users/entities/RegisterUser');
  */
 class AddUserUseCase {
   /**
-   * @param {{userRepository: import('../../Domains/users/UserRepository'), passwordHash: import('../../Applications/security/PasswordHash')}} obj
+   * @param {{userRepository: UserRepository, passwordHash: PasswordHash}
+   * } params
    */
-  constructor({ userRepository, passwordHash }) {
+  constructor({userRepository, passwordHash}) {
     this._userRepository = userRepository;
     this._passwordHash = passwordHash;
   }
 
+  /**
+   * @param {{
+   *  username: string,
+   *  password: string,
+   *  fullname: string
+   * }} useCasePayload
+   * @return {Promise<RegisteredUser>}
+   */
   async execute(useCasePayload) {
     const registerUser = new RegisterUser(useCasePayload);
     await this._userRepository.verifyAvailableUsername(registerUser.username);
-    registerUser.password = await this._passwordHash.hash(registerUser.password);
+    registerUser.password =
+      await this._passwordHash.hash(registerUser.password);
     return this._userRepository.addUser(registerUser);
   }
 }
