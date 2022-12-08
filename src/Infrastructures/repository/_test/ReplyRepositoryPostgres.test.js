@@ -11,6 +11,8 @@ const ReplyRepositoryPostgres = require('../ReplyRepositoryPostgres');
 const AddReply = require('../../../Domains/replies/entities/AddReply');
 const AddedReply = require('../../../Domains/replies/entities/AddedReply');
 const DeleteReply = require('../../../Domains/replies/entities/DeleteReply');
+const AuthorizationError =
+require('../../../Commons/exceptions/AuthorizationError');
 
 describe('ReplyRepositoryPostgres postgres', () => {
   afterEach(async () => {
@@ -125,6 +127,66 @@ describe('ReplyRepositoryPostgres postgres', () => {
       // Action and Assert
       await expect(replyRepositoryPostgres.deleteReply(deleteComment))
           .rejects.toThrowError(NotFoundError);
+    });
+
+    it('should throw AuthorizationError if comment not owned by user',
+        async () => {
+          // Arrange
+          await RepliesTableTestHelper.addReply({
+            id: 'reply-123',
+            owner: 'user-123',
+          });
+          const deleteComment = new DeleteReply({
+            threadId: 'thread-123',
+            commentId: 'comment-123',
+            replyId: 'reply-123',
+            owner: 'user-456',
+          });
+          const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+
+          // Action and Assert
+          await expect(replyRepositoryPostgres.deleteReply(deleteComment))
+              .rejects.toThrowError(AuthorizationError);
+        },
+    );
+  });
+
+  describe('getCommentReplies function', () => {
+    it('should return replies correctly', async () => {
+      // Arrange
+      await RepliesTableTestHelper.addReply({
+        id: 'reply-0',
+        content: 'reply',
+        owner: 'user-123',
+        comment_id: 'comment-123',
+      });
+      await RepliesTableTestHelper.addReply({
+        id: 'reply-1',
+        content: 'reply',
+        owner: 'user-123',
+        comment_id: 'comment-123',
+      });
+
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+
+      // Action
+      const replies = await replyRepositoryPostgres.getCommentReplies(
+          'comment-123',
+      );
+
+      // Assert
+
+      expect(replies).toHaveLength(2);
+
+      replies.forEach((reply) => {
+        expect(typeof reply.id).toBe('string');
+
+        expect(typeof reply.content).toBe('string');
+        expect(reply.content).toBe('reply');
+
+        expect(typeof reply.date).toBe('string');
+        expect(typeof reply.username).toBe('string');
+      });
     });
   });
 });

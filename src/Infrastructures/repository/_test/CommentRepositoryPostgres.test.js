@@ -10,6 +10,8 @@ const AddComment = require('../../../Domains/comments/entities/AddComment');
 const AddedComment = require('../../../Domains/comments/entities/AddedComment');
 const DeleteComment =
 require('../../../Domains/comments/entities/DeleteComment');
+const AuthorizationError =
+require('../../../Commons/exceptions/AuthorizationError');
 
 describe('CommentRepositoryPostgres postgres', () => {
   afterEach(async () => {
@@ -119,6 +121,80 @@ describe('CommentRepositoryPostgres postgres', () => {
       // Action and Assert
       await expect(commentRepositoryPostgres.deleteComment(deleteComment))
           .rejects.toThrowError(NotFoundError);
+    });
+
+    it('should throw AuthorizationError if comment not owned', async () => {
+      // Arrange
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        threadId: 'thread-123',
+        owner: 'user-123',
+      });
+      const deleteComment = new DeleteComment({
+        threadId: 'thread-123',
+        commentId: 'comment-123',
+        owner: 'user-321',
+      });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action and Assert
+      await expect(commentRepositoryPostgres.deleteComment(deleteComment))
+          .rejects.toThrowError(AuthorizationError);
+    });
+  });
+
+  describe('verifyCommentExists function', () => {
+    it('should not throw NotFoundError if comment exists', async () => {
+      // Arrange
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        threadId: 'thread-123',
+        owner: 'user-123',
+      });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action and Assert
+      await expect(commentRepositoryPostgres.verifyCommentExists('comment-123'))
+          .resolves.not.toThrowError(NotFoundError);
+    });
+
+    it('should throw NotFoundError if comment not exists', async () => {
+      // Arrange
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action and Assert
+      await expect(commentRepositoryPostgres.verifyCommentExists('comment-123'))
+          .rejects.toThrowError(NotFoundError);
+    });
+  });
+
+  describe('getThreadComments function', () => {
+    it('should return comments correctly', async () => {
+      // Arrange
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        threadId: 'thread-123',
+        owner: 'user-123',
+      });
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-124',
+        threadId: 'thread-123',
+        owner: 'user-123',
+      });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action
+      const comments = await commentRepositoryPostgres
+          .getThreadComments('thread-123');
+
+      // Assert
+      expect(comments).toHaveLength(2);
+      comments.forEach((comment) => {
+        expect(typeof comment.id).toBe('string');
+        expect(typeof comment.content).toBe('string');
+        expect(typeof comment.date).toBe('string');
+        expect(typeof comment.username).toBe('string');
+      });
     });
   });
 });

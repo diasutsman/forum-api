@@ -137,4 +137,59 @@ describe('/threads endpoint', () => {
           expect(responseJson.message).toEqual('Missing authentication');
         });
   });
+
+  describe('when GET /threads{id}', () => {
+    it('should response 200 and thread', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({
+        id: 'user-123',
+        username: 'user_123',
+      });
+      await ThreadsTableTestHelper.addThread({
+        id: 'thread-123',
+        title: 'title',
+        body: 'body',
+        owner: 'user-123',
+      });
+      const threadId = 'thread-123';
+
+      const server = await createServer(container);
+
+      // Action
+      const response = await server.inject({
+        method: 'GET',
+        url: `/threads/${threadId}`,
+      });
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual('success');
+      expect(responseJson.data.thread).toBeDefined();
+      expect(responseJson.data.thread.id).toEqual(threadId);
+      expect(responseJson.data.thread.title).toEqual('title');
+      expect(responseJson.data.thread.body).toEqual('body');
+      expect(responseJson.data.thread.username).toEqual('user_123');
+      expect(typeof responseJson.data.thread.date).toEqual('string');
+      expect(responseJson.data.thread.comments).toBeInstanceOf(Array);
+    });
+
+    it('should response 404 when thread not found', async () => {
+      // Arrange
+      const threadId = 'thread-123';
+      const server = await createServer(container);
+
+      // Action
+      const response = await server.inject({
+        method: 'GET',
+        url: `/threads/${threadId}`,
+      });
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('thread tidak ditemukan');
+    });
+  });
 });
