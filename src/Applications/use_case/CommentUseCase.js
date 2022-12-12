@@ -50,7 +50,9 @@ class CommentUseCase {
    * }} useCasePayload
    */
   async deleteComment(useCasePayload) {
-    await this._threadRepository.getThreadById(useCasePayload.threadId);
+    await this._threadRepository.verifyThreadAvailability(
+        useCasePayload.threadId,
+    );
 
     await this._commentRepository.deleteComment(useCasePayload);
   }

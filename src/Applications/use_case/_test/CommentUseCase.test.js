@@ -114,13 +114,8 @@ describe('CommentUseCase', () => {
       /** mocking needed function */
       mockCommentRepository.deleteComment = jest.fn()
           .mockImplementation(() => Promise.resolve());
-      mockThreadRepository.getThreadById = jest.fn()
-          .mockImplementation(() => Promise.resolve({
-            id: 'thread-123',
-            title: 'title',
-            body: 'body',
-            owner: 'user-123',
-          }));
+      mockThreadRepository.verifyThreadAvailability = jest.fn()
+          .mockImplementation(() => Promise.resolve());
 
       /** creating use case instance */
       const commentUseCase = new CommentUseCase({
@@ -138,7 +133,7 @@ describe('CommentUseCase', () => {
             commentId: useCasePayload.commentId,
             owner: useCasePayload.owner,
           }));
-      expect(mockThreadRepository.getThreadById)
+      expect(mockThreadRepository.verifyThreadAvailability)
           .toBeCalledWith(useCasePayload.threadId);
     });
 
@@ -158,7 +153,7 @@ describe('CommentUseCase', () => {
       const mockThreadRepository = new ThreadRepository();
 
       /** mocking needed function */
-      mockThreadRepository.getThreadById = jest.fn()
+      mockThreadRepository.verifyThreadAvailability = jest.fn()
           .mockImplementation(() => {
             throw new NotFoundError('thread tidak ditemukan');
           });
@@ -172,7 +167,7 @@ describe('CommentUseCase', () => {
       // Action & Assert
       await expect(commentUseCase.deleteComment(useCasePayload))
           .rejects.toThrowError('thread tidak ditemukan');
-      expect(mockThreadRepository.getThreadById)
+      expect(mockThreadRepository.verifyThreadAvailability)
           .toBeCalledWith(useCasePayload.threadId);
     });
   });

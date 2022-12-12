@@ -42,7 +42,7 @@ describe('ReplyUseCase', () => {
           })));
       mockCommentRepository.verifyCommentExists = jest.fn()
           .mockImplementation(() => Promise.resolve());
-      mockThreadRepository.getThreadById = jest.fn()
+      mockThreadRepository.verifyThreadAvailability = jest.fn()
           .mockImplementation(() => Promise.resolve());
 
       /** creating use case instance */
@@ -64,7 +64,7 @@ describe('ReplyUseCase', () => {
         owner: useCasePayload.owner,
         date: useCasePayload.date,
       }));
-      expect(mockThreadRepository.getThreadById)
+      expect(mockThreadRepository.verifyThreadAvailability)
           .toBeCalledWith(useCasePayload.threadId);
       expect(mockCommentRepository.verifyCommentExists)
           .toBeCalledWith(useCasePayload.commentId);
@@ -91,7 +91,7 @@ describe('ReplyUseCase', () => {
           .mockImplementation(() => Promise.resolve());
       mockCommentRepository.verifyCommentExists = jest.fn()
           .mockImplementation(() => Promise.resolve());
-      mockThreadRepository.getThreadById = jest.fn()
+      mockThreadRepository.verifyThreadAvailability = jest.fn()
           .mockImplementation(() => Promise.resolve());
 
       /** creating use case instance */
@@ -111,7 +111,7 @@ describe('ReplyUseCase', () => {
         replyId: useCasePayload.replyId,
         owner: useCasePayload.owner,
       }));
-      expect(mockThreadRepository.getThreadById)
+      expect(mockThreadRepository.verifyThreadAvailability)
           .toBeCalledWith(useCasePayload.threadId);
       expect(mockCommentRepository.verifyCommentExists)
           .toBeCalledWith(useCasePayload.commentId);

@@ -41,7 +41,7 @@ class ReplyUseCase {
    */
   async addReply(useCasePayload) {
     const addReply = new AddReply(useCasePayload);
-    await this._threadRepository.getThreadById(addReply.threadId);
+    await this._threadRepository.verifyThreadAvailability(addReply.threadId);
     await this._commentRepository.verifyCommentExists(addReply.commentId);
     const addedReply = await this._replyRepository.addReply(addReply);
     return addedReply;
@@ -58,7 +58,7 @@ class ReplyUseCase {
    */
   async deleteReply(useCasePayload) {
     const deleteReply = new DeleteReply(useCasePayload);
-    await this._threadRepository.getThreadById(deleteReply.threadId);
+    await this._threadRepository.verifyThreadAvailability(deleteReply.threadId);
     await this._commentRepository.verifyCommentExists(deleteReply.commentId);
     await this._replyRepository.deleteReply(deleteReply);
   }
