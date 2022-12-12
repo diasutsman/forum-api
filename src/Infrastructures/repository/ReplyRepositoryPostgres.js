@@ -96,16 +96,10 @@ class ReplyRepositoryPostgres extends ReplyRepository {
    */
   async getCommentReplies(commentId) {
     const query = {
-      text: `SELECT replies.id, replies.date, users.username,
-      CASE 
-        WHEN is_delete THEN '**balasan telah dihapus**'
-        ELSE replies.content 
-      END
-      AS content
+      text: `SELECT replies.*, users.username
       FROM replies
       LEFT JOIN users ON replies.owner = users.id
       WHERE comment_id = $1
-      ORDER BY date ASC
       `,
       values: [commentId],
     };

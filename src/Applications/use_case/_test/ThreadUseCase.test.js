@@ -31,7 +31,11 @@ describe('ThreadUseCase', () => {
 
       /** mocking needed function */
       mockThreadRepository.addThread = jest.fn()
-          .mockImplementation(() => Promise.resolve(expectedAddedThread));
+          .mockImplementation(() => Promise.resolve(new AddedThread({
+            id: 'thread-123',
+            title: useCasePayload.title,
+            owner: 'user-123',
+          })));
 
       /** creating use case instance */
       const threadUseCase = new ThreadUseCase({
@@ -56,42 +60,104 @@ describe('ThreadUseCase', () => {
     it('should orchestrating the get detail thread correctly', async () => {
       // Arrange
       const threadId = 'thread-123';
-      const expectedAddedThread = new AddedThread({
+      const dateStr = new Date().toISOString();
+
+      const expectedThread = {
         id: threadId,
         title: 'title',
         body: 'body',
-        date: new Date().toISOString(),
-        owner: 'user-123',
-      });
-      const expectedReplies = [
-        {
-          id: 'reply-123',
-          content: 'content',
-          owner: 'user-123',
-        },
-      ];
-      const expectedComments = [
-        {
-          id: 'comment-123',
-          content: 'content',
-          date: new Date().toISOString(),
-          owner: 'user-123',
-          replies: expectedReplies,
-        },
-      ];
+        date: dateStr,
+        username: 'user_123',
+        comments: [
+          {
+            id: 'comment-123',
+            content: 'content',
+            date: dateStr,
+            username: 'user_123',
+            replies: [
+              {
+                id: 'reply-123',
+                content: '**balasan telah dihapus**',
+                date: dateStr,
+                username: 'user_123',
+              },
+              {
+                id: 'reply-124',
+                content: 'content',
+                date: dateStr,
+                username: 'user_123',
+              },
+            ],
+          },
+          {
+            id: 'comment-124',
+            content: '**komentar telah dihapus**',
+            date: dateStr,
+            username: 'user_123',
+            replies: [],
+          },
+        ],
+      };
 
       /** creating dependency of use case */
       const mockThreadRepository = new ThreadRepository();
       const mockCommentRepository = new CommentRepository();
       const mockReplyRepository = new ReplyRepository();
       mockThreadRepository.getThreadById = jest.fn()
-          .mockImplementation(() => Promise.resolve(expectedAddedThread));
+          .mockImplementation(() => Promise.resolve({
+            id: 'thread-123',
+            title: 'title',
+            body: 'body',
+            date: dateStr,
+            username: 'user_123',
+            owner: 'user-123',
+          }));
       mockCommentRepository.getThreadComments = jest.fn()
-          .mockImplementation(() => Promise.resolve(expectedComments));
-      mockCommentRepository.getThreadComments = jest.fn()
-          .mockImplementation(() => Promise.resolve(expectedComments));
+          .mockImplementation((threadId) => Promise.resolve([
+            {
+              id: 'comment-123',
+              content: 'content',
+              owner: 'user-123',
+              date: dateStr,
+              thread_id: 'thread-123',
+              is_delete: false,
+              username: 'user_123',
+            },
+            {
+              id: 'comment-124',
+              content: 'content',
+              owner: 'user-123',
+              date: dateStr,
+              thread_id: 'thread-123',
+              is_delete: true,
+              username: 'user_123',
+            },
+          ]));
       mockReplyRepository.getCommentReplies = jest.fn()
-          .mockImplementation(() => Promise.resolve(expectedReplies));
+          .mockImplementation((commentId) => Promise.resolve(
+            commentId === 'comment-123' ? [
+              {
+                id: 'reply-123',
+                content: 'content',
+                owner: 'user-123',
+                date: dateStr,
+                thread_id: threadId,
+                comment_id: 'comment-123',
+                is_delete: true,
+                username: 'user_123',
+              },
+              {
+                id: 'reply-124',
+                content: 'content',
+                owner: 'user-123',
+                date: dateStr,
+                thread_id: threadId,
+                comment_id: 'comment-123',
+                is_delete: false,
+                username: 'user_123',
+              },
+            ] : [],
+          ));
 
       /** creating use case instance */
       const threadUseCase = new ThreadUseCase({
@@ -101,15 +167,15 @@ describe('ThreadUseCase', () => {
       });
 
       // Action
-      const addedThread = await threadUseCase.getThreadById(threadId);
-
+      const thread = await threadUseCase.getThreadById(threadId);
+      console.log(JSON.stringify(thread, null, 2));
       // Assert
-      expect(addedThread).toStrictEqual(expectedAddedThread);
+      expect(thread).toStrictEqual(expectedThread);
       expect(mockThreadRepository.getThreadById).toBeCalledWith(threadId);
       expect(mockCommentRepository.getThreadComments)
           .toBeCalledWith(threadId);
       expect(mockReplyRepository.getCommentReplies)
-          .toBeCalledWith(expectedComments[0].id);
+          .toBeCalledWith('comment-123');
     });
   });
 });

@@ -59,7 +59,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
    */
   async getThreadById(id) {
     const query = {
-      text: `SELECT threads.id, title, body, threads.date, users.username
+      text: `SELECT threads.*, users.username
       FROM threads 
       LEFT JOIN users ON threads.owner = users.id
       WHERE threads.id = $1`,
@@ -73,6 +73,13 @@ class ThreadRepositoryPostgres extends ThreadRepository {
     }
 
     return result.rows[0];
+  }
+
+  /**
+   * @param {string} id
+   */
+  async verifyThreadAvailability(id) {
+    await this.getThreadById(id);
   }
 }
 

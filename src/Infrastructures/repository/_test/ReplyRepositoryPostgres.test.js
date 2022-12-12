@@ -25,6 +25,7 @@ describe('ReplyRepositoryPostgres postgres', () => {
   beforeEach(async () => {
     await UsersTableTestHelper.addUser({
       id: 'user-123',
+      username: 'user_123',
     });
     await ThreadsTableTestHelper.addThread({
       id: 'thread-123',
@@ -111,7 +112,7 @@ describe('ReplyRepositoryPostgres postgres', () => {
       const comments = await RepliesTableTestHelper
           .findRepliesById('reply-123');
       expect(comments).toHaveLength(1);
-      expect(comments[0].is_delete).toBeTruthy();
+      expect(comments[0].is_delete).toEqual(true);
     });
 
     it('should throw NotFoundError if comment not found', async () => {
@@ -154,17 +155,14 @@ describe('ReplyRepositoryPostgres postgres', () => {
   describe('getCommentReplies function', () => {
     it('should return replies correctly', async () => {
       // Arrange
+      const dateStr = new Date().toISOString();
       await RepliesTableTestHelper.addReply({
-        id: 'reply-0',
+        id: 'reply-123',
         content: 'reply',
         owner: 'user-123',
-        comment_id: 'comment-123',
-      });
-      await RepliesTableTestHelper.addReply({
-        id: 'reply-1',
-        content: 'reply',
-        owner: 'user-123',
-        comment_id: 'comment-123',
+        date: dateStr,
+        commentId: 'comment-123',
+        threadId: 'thread-123',
       });
 
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
@@ -176,16 +174,15 @@ describe('ReplyRepositoryPostgres postgres', () => {
 
       // Assert
 
-      expect(replies).toHaveLength(2);
-
+      expect(replies).toHaveLength(1);
       replies.forEach((reply) => {
-        expect(typeof reply.id).toBe('string');
-
-        expect(typeof reply.content).toBe('string');
-        expect(reply.content).toBe('reply');
-
-        expect(typeof reply.date).toBe('string');
-        expect(typeof reply.username).toBe('string');
+        expect(reply.id).toEqual('reply-123');
+        expect(reply.content).toEqual('reply');
+        expect(reply.owner).toBe('user-123');
+        expect(reply.date).toEqual(dateStr);
+        expect(reply.comment_id).toEqual('comment-123');
+        expect(reply.thread_id).toEqual('thread-123');
+        expect(reply.is_delete).toEqual(false);
       });
     });
   });

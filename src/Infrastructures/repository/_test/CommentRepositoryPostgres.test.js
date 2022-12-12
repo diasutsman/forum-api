@@ -23,6 +23,7 @@ describe('CommentRepositoryPostgres postgres', () => {
   beforeEach(async () => {
     await UsersTableTestHelper.addUser({
       id: 'user-123',
+      username: 'user_123',
     });
     await ThreadsTableTestHelper.addThread({
       id: 'thread-123',
@@ -106,7 +107,7 @@ describe('CommentRepositoryPostgres postgres', () => {
       const comments = await CommentsTableTestHelper
           .findCommentsById('comment-123');
       expect(comments).toHaveLength(1);
-      expect(comments[0].is_delete).toBeTruthy();
+      expect(comments[0].is_delete).toEqual(true);
     });
 
     it('should throw NotFoundError if comment not found', async () => {
@@ -171,13 +172,11 @@ describe('CommentRepositoryPostgres postgres', () => {
   describe('getThreadComments function', () => {
     it('should return comments correctly', async () => {
       // Arrange
+      const dateStr = new Date().toISOString();
       await CommentsTableTestHelper.addComment({
         id: 'comment-123',
-        threadId: 'thread-123',
-        owner: 'user-123',
-      });
-      await CommentsTableTestHelper.addComment({
-        id: 'comment-124',
+        content: 'content',
+        date: dateStr,
         threadId: 'thread-123',
         owner: 'user-123',
       });
@@ -188,12 +187,14 @@ describe('CommentRepositoryPostgres postgres', () => {
           .getThreadComments('thread-123');
 
       // Assert
-      expect(comments).toHaveLength(2);
+      expect(comments).toHaveLength(1);
       comments.forEach((comment) => {
-        expect(typeof comment.id).toBe('string');
-        expect(typeof comment.content).toBe('string');
-        expect(typeof comment.date).toBe('string');
-        expect(typeof comment.username).toBe('string');
+        expect(comment.id).toEqual('comment-123');
+        expect(comment.content).toBe('content');
+        expect(comment.date).toEqual(dateStr);
+        expect(comment.thread_id).toEqual('thread-123');
+        expect(comment.owner).toEqual('user-123');
+        expect(comment.username).toEqual('user_123');
       });
     });
   });

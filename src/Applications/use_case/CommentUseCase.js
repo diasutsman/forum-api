@@ -32,7 +32,9 @@ class CommentUseCase {
    * @return {Promise<AddedComment>}
    */
   async addComment(useCasePayload) {
-    await this._threadRepository.getThreadById(useCasePayload.threadId);
+    await this._threadRepository.verifyThreadAvailability(
+        useCasePayload.threadId,
+    );
 
     const addedComment =
       await this._commentRepository.addComment(new AddComment(useCasePayload));

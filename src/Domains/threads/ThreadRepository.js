@@ -22,6 +22,13 @@ class ThreadRepository {
   async getThreadById(id) {
     throw new Error('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
+  /**
+   * @param {string} id
+   * @memberof ThreadRepository
+   */
+  async verifyThreadAvailability(id) {
+    throw new Error('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
 }
 
 module.exports = ThreadRepository;

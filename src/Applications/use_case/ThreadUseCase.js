@@ -55,12 +55,38 @@ class ThreadUseCase {
    */
   async getThreadById(id) {
     const thread = await this._threadRepository.getThreadById(id);
-    thread.comments = await this._commentRepository.getThreadComments(id);
-    for (const comment of thread.comments) {
-      comment.replies =
-        await this._replyRepository.getCommentReplies(comment.id);
-    }
-    return thread;
+    const comments = await this._commentRepository.getThreadComments(id);
+    return {
+      id: thread.id,
+      title: thread.title,
+      body: thread.body,
+      date: thread.date,
+      username: thread.username,
+      comments: await Promise.all(comments.map(
+          async (comment) => {
+            const replies = await this._replyRepository
+                .getCommentReplies(comment.id);
+
+            return {
+              id: comment.id,
+              content: comment.is_delete ?
+              '**komentar telah dihapus**' :
+              comment.content,
+              date: comment.date,
+              username: comment.username,
+              replies: replies.map((reply) => ({
+                id: reply.id,
+                content: reply.is_delete ?
+              '**balasan telah dihapus**' :
+              reply.content,
+                date: reply.date,
+                username: reply.username,
+              }),
+              ).sort((a, b) => a.date.localeCompare(b.date)),
+            };
+          }),
+      ),
+    };
   }
 }
 

@@ -80,6 +80,7 @@ describe('ThreadRepositoryPostgres postgres', () => {
 
     it('should return thread correctly', async () => {
       // Arrange
+      const dateStr = new Date().toISOString();
       await UsersTableTestHelper.addUser({
         id: 'user-123',
         username: 'dicoding',
@@ -89,6 +90,7 @@ describe('ThreadRepositoryPostgres postgres', () => {
         title: 'title',
         body: 'body',
         owner: 'user-123',
+        date: dateStr,
       });
 
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
@@ -101,6 +103,7 @@ describe('ThreadRepositoryPostgres postgres', () => {
       expect(thread.title).toEqual('title');
       expect(thread.body).toEqual('body');
       expect(thread.username).toEqual('dicoding');
+      expect(thread.date).toEqual(dateStr);
     });
   });
 });

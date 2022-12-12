@@ -34,14 +34,13 @@ describe('CommentUseCase', () => {
 
       /** mocking needed function */
       mockCommentRepository.addComment = jest.fn()
-          .mockImplementation(() => Promise.resolve(expectedAddedComment));
-      mockThreadRepository.getThreadById = jest.fn()
-          .mockImplementation(() => Promise.resolve({
-            id: 'thread-123',
-            title: 'title',
-            body: 'body',
+          .mockImplementation(() => Promise.resolve(new AddedComment({
+            id: 'comment-123',
+            content: 'content',
             owner: 'user-123',
-          }));
+          })));
+      mockThreadRepository.verifyThreadAvailability = jest.fn()
+          .mockImplementation(() => Promise.resolve());
 
       /** creating use case instance */
       const commentUseCase = new CommentUseCase({
@@ -60,11 +59,11 @@ describe('CommentUseCase', () => {
         owner: useCasePayload.owner,
         date: useCasePayload.date,
       }));
-      expect(mockThreadRepository.getThreadById)
+      expect(mockThreadRepository.verifyThreadAvailability)
           .toBeCalledWith(useCasePayload.threadId);
     });
 
-    it('should orchestrating the add comment action correctly' +
+    it('should orchestrating the add comment action correctly ' +
       'but thread not found',
     async () => {
       // Arrange
@@ -80,7 +79,7 @@ describe('CommentUseCase', () => {
       const mockThreadRepository = new ThreadRepository();
 
       /** mocking needed function */
-      mockThreadRepository.getThreadById = jest.fn()
+      mockThreadRepository.verifyThreadAvailability = jest.fn()
           .mockImplementation(() => {
             throw new NotFoundError('thread tidak ditemukan');
           });
@@ -94,7 +93,7 @@ describe('CommentUseCase', () => {
       // Action & Assert
       await expect(commentUseCase.addComment(useCasePayload))
           .rejects.toThrowError('thread tidak ditemukan');
-      expect(mockThreadRepository.getThreadById)
+      expect(mockThreadRepository.verifyThreadAvailability)
           .toBeCalledWith(useCasePayload.threadId);
     });
   });
