@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+
 
 exports.up = (pgm) => {
   pgm.createTable('replies', {
@@ -14,10 +14,6 @@ exports.up = (pgm) => {
       type: 'VARCHAR(50)',
       notNull: true,
     },
-    date: {
-      type: 'TEXT',
-      notNull: true,
-    },
     thread_id: {
       type: 'VARCHAR(50)',
       notNull: true,
@@ -26,12 +22,22 @@ exports.up = (pgm) => {
       type: 'VARCHAR(50)',
       notNull: true,
     },
+    date: {
+      type: 'timestamp',
+      notNull: true,
+      default: pgm.func('current_timestamp'),
+    },
     is_delete: {
       type: 'BOOLEAN',
+      default: false,
     },
   });
 
-  pgm.sql('ALTER TABLE replies ALTER COLUMN is_delete set default false');
+  // add owner as foreign key to user id
+  pgm.addConstraint('replies',
+      'fk_replies.owner_users.id',
+      'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE',
+  );
 };
 
 exports.down = (pgm) => {

@@ -60,31 +60,31 @@ describe('ThreadUseCase', () => {
     it('should orchestrating the get detail thread correctly', async () => {
       // Arrange
       const threadId = 'thread-123';
-      const dateStr = new Date().toISOString();
+      const date = new Date();
 
       const expectedThread = {
         id: threadId,
         title: 'title',
         body: 'body',
-        date: dateStr,
+        date: date,
         username: 'user_123',
         comments: [
           {
             id: 'comment-123',
             content: 'content',
-            date: dateStr,
+            date: date.toISOString(),
             username: 'user_123',
             replies: [
               {
                 id: 'reply-123',
                 content: '**balasan telah dihapus**',
-                date: dateStr,
+                date: date.toISOString(),
                 username: 'user_123',
               },
               {
                 id: 'reply-124',
                 content: 'content',
-                date: dateStr,
+                date: date.toISOString(),
                 username: 'user_123',
               },
             ],
@@ -92,7 +92,7 @@ describe('ThreadUseCase', () => {
           {
             id: 'comment-124',
             content: '**komentar telah dihapus**',
-            date: dateStr,
+            date: date.toISOString(),
             username: 'user_123',
             replies: [],
           },
@@ -108,7 +108,7 @@ describe('ThreadUseCase', () => {
             id: 'thread-123',
             title: 'title',
             body: 'body',
-            date: dateStr,
+            date: date,
             username: 'user_123',
             owner: 'user-123',
           }));
@@ -118,7 +118,7 @@ describe('ThreadUseCase', () => {
               id: 'comment-123',
               content: 'content',
               owner: 'user-123',
-              date: dateStr,
+              date: date,
               thread_id: 'thread-123',
               is_delete: false,
               username: 'user_123',
@@ -127,7 +127,7 @@ describe('ThreadUseCase', () => {
               id: 'comment-124',
               content: 'content',
               owner: 'user-123',
-              date: dateStr,
+              date: date,
               thread_id: 'thread-123',
               is_delete: true,
               username: 'user_123',
@@ -140,7 +140,7 @@ describe('ThreadUseCase', () => {
                 id: 'reply-123',
                 content: 'content',
                 owner: 'user-123',
-                date: dateStr,
+                date: date,
                 thread_id: threadId,
                 comment_id: 'comment-123',
                 is_delete: true,
@@ -150,7 +150,7 @@ describe('ThreadUseCase', () => {
                 id: 'reply-124',
                 content: 'content',
                 owner: 'user-123',
-                date: dateStr,
+                date: date,
                 thread_id: threadId,
                 comment_id: 'comment-123',
                 is_delete: false,
@@ -168,8 +168,11 @@ describe('ThreadUseCase', () => {
 
       // Action
       const thread = await threadUseCase.getThreadById(threadId);
-      console.log(JSON.stringify(thread, null, 2));
       // Assert
+      console.log({
+        thread,
+        expectedThread,
+      });
       expect(thread).toStrictEqual(expectedThread);
       expect(mockThreadRepository.getThreadById).toBeCalledWith(threadId);
       expect(mockCommentRepository.getThreadComments)

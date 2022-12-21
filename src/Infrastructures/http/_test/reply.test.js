@@ -31,7 +31,10 @@ describe('/threads/{threadsId}/comments/{commentsId}/replies endpoint', () => {
         username: 'dias',
       });
 
-      await ThreadsTableTestHelper.addThread({id: 'thread-123'});
+      await ThreadsTableTestHelper.addThread({
+        id: 'thread-123',
+        owner: 'user-123',
+      });
       await CommentsTableTestHelper.addComment({
         id: 'comment-123',
         threadId: 'thread-123',
@@ -189,8 +192,11 @@ describe('/threads/{threadsId}/comments/{commentsId}/replies endpoint', () => {
 
     it('should response 401 when request with no authentication', async () => {
       // Arrange
-
-      await ThreadsTableTestHelper.addThread({id: 'thread-123'});
+      await UsersTableTestHelper.addUser({id: 'user-123'});
+      await ThreadsTableTestHelper.addThread({
+        id: 'thread-123',
+        owner: 'user-123',
+      });
       await CommentsTableTestHelper.addComment({
         id: 'comment-123',
         threadId: 'thread-123',

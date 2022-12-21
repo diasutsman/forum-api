@@ -155,12 +155,13 @@ describe('ReplyRepositoryPostgres postgres', () => {
   describe('getCommentReplies function', () => {
     it('should return replies correctly', async () => {
       // Arrange
-      const dateStr = new Date().toISOString();
+      const date = new Date();
+      const dateStr = date.toISOString();
       await RepliesTableTestHelper.addReply({
         id: 'reply-123',
         content: 'reply',
         owner: 'user-123',
-        date: dateStr,
+        date: date,
         commentId: 'comment-123',
         threadId: 'thread-123',
       });
@@ -179,7 +180,7 @@ describe('ReplyRepositoryPostgres postgres', () => {
         expect(reply.id).toEqual('reply-123');
         expect(reply.content).toEqual('reply');
         expect(reply.owner).toBe('user-123');
-        expect(reply.date).toEqual(dateStr);
+        expect(reply.date.toISOString()).toEqual(dateStr);
         expect(reply.comment_id).toEqual('comment-123');
         expect(reply.thread_id).toEqual('thread-123');
         expect(reply.is_delete).toEqual(false);

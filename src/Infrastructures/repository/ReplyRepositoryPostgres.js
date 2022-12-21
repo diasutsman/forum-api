@@ -33,13 +33,13 @@ class ReplyRepositoryPostgres extends ReplyRepository {
    */
   async addReply(addReply) {
     const id = `reply-${this._idGenerator()}`;
-    const {content, owner, date, threadId, commentId} = addReply;
+    const {content, owner, threadId, commentId} = addReply;
     const query = {
       text: `
-        INSERT INTO replies VALUES($1, $2, $3, $4, $5, $6) 
+        INSERT INTO replies VALUES($1, $2, $3, $4, $5) 
         RETURNING id, content, owner
       `,
-      values: [id, content, owner, date, threadId, commentId],
+      values: [id, content, owner, threadId, commentId],
     };
 
     const result = await this._pool.query(query);
@@ -99,8 +99,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
       text: `SELECT replies.*, users.username
       FROM replies
       LEFT JOIN users ON replies.owner = users.id
-      WHERE comment_id = $1
-      `,
+      WHERE comment_id = $1`,
       values: [commentId],
     };
 

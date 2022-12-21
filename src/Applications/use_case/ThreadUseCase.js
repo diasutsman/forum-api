@@ -66,20 +66,19 @@ class ThreadUseCase {
           async (comment) => {
             const replies = await this._replyRepository
                 .getCommentReplies(comment.id);
-
             return {
               id: comment.id,
               content: comment.is_delete ?
               '**komentar telah dihapus**' :
               comment.content,
-              date: comment.date,
+              date: comment.date.toISOString(),
               username: comment.username,
               replies: replies.map((reply) => ({
                 id: reply.id,
                 content: reply.is_delete ?
               '**balasan telah dihapus**' :
               reply.content,
-                date: reply.date,
+                date: reply.date.toISOString(),
                 username: reply.username,
               }),
               ).sort((a, b) => a.date.localeCompare(b.date)),

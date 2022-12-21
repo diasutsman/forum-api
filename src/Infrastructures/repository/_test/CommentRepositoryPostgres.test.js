@@ -172,11 +172,11 @@ describe('CommentRepositoryPostgres postgres', () => {
   describe('getThreadComments function', () => {
     it('should return comments correctly', async () => {
       // Arrange
-      const dateStr = new Date().toISOString();
+      const date = new Date();
       await CommentsTableTestHelper.addComment({
         id: 'comment-123',
         content: 'content',
-        date: dateStr,
+        date: date,
         threadId: 'thread-123',
         owner: 'user-123',
       });
@@ -190,8 +190,8 @@ describe('CommentRepositoryPostgres postgres', () => {
       expect(comments).toHaveLength(1);
       comments.forEach((comment) => {
         expect(comment.id).toEqual('comment-123');
-        expect(comment.content).toBe('content');
-        expect(comment.date).toEqual(dateStr);
+        expect(comment.content).toEqual('content');
+        expect(comment.date.toISOString()).toEqual(date.toISOString());
         expect(comment.thread_id).toEqual('thread-123');
         expect(comment.owner).toEqual('user-123');
         expect(comment.username).toEqual('user_123');

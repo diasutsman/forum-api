@@ -13,6 +13,13 @@ describe('ThreadRepositoryPostgres postgres', () => {
     await UsersTableTestHelper.cleanTable();
   });
 
+  beforeEach(async () => {
+    await UsersTableTestHelper.addUser({
+      id: 'user-123',
+      username: 'dicoding',
+    });
+  });
+
   afterAll(async () => {
     await pool.end();
   });
@@ -81,10 +88,6 @@ describe('ThreadRepositoryPostgres postgres', () => {
     it('should return thread correctly', async () => {
       // Arrange
       const dateStr = new Date().toISOString();
-      await UsersTableTestHelper.addUser({
-        id: 'user-123',
-        username: 'dicoding',
-      });
       await ThreadsTableTestHelper.addThread({
         id: 'thread-123',
         title: 'title',
