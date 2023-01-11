@@ -71,6 +71,7 @@ class ThreadUseCase {
               content: comment.is_delete ?
               '**komentar telah dihapus**' :
               comment.content,
+              likeCount: +comment.like_count,
               date: comment.date.toISOString(),
               username: comment.username,
               replies: replies.map((reply) => ({
@@ -81,7 +82,7 @@ class ThreadUseCase {
                 date: reply.date.toISOString(),
                 username: reply.username,
               }),
-              ).sort((a, b) => a.date.localeCompare(b.date)),
+              ),
             };
           }),
       ),

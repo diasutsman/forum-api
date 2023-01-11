@@ -7,6 +7,8 @@ const DeleteComment =
   require('../../../Domains/comments/entities/DeleteComment');
 const CommentUseCase = require('../CommentUseCase');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
+const ToggleLikeComment =
+  require('../../../Domains/comments/entities/ToggleLikeComment');
 
 describe('CommentUseCase', () => {
   /**
@@ -167,6 +169,46 @@ describe('CommentUseCase', () => {
       // Action & Assert
       await expect(commentUseCase.deleteComment(useCasePayload))
           .rejects.toThrowError('thread tidak ditemukan');
+      expect(mockThreadRepository.verifyThreadAvailability)
+          .toBeCalledWith(useCasePayload.threadId);
+    });
+  });
+
+  describe('toggleLike', () => {
+    it('should orchestrating like comment action correctly', () => {
+      // Arrange
+      const useCasePayload = {
+        threadId: 'thread-123',
+        commentId: 'comment-123',
+        liker: 'user-123',
+      };
+
+      /** creating dependency of use case */
+      const mockCommentRepository = new CommentRepository();
+      const mockThreadRepository = new ThreadRepository();
+
+      /** mocking needed function */
+      mockThreadRepository.verifyThreadAvailability = jest.fn()
+          .mockImplementation(() => Promise.resolve());
+      mockCommentRepository.toggleLike = jest.fn()
+          .mockImplementation(() => Promise.resolve());
+
+      /** creating use case instance */
+      const commentUseCase = new CommentUseCase({
+        commentRepository: mockCommentRepository,
+        threadRepository: mockThreadRepository,
+      });
+
+      // Action
+      commentUseCase.toggleLike(useCasePayload);
+
+      // Assert
+      expect(mockCommentRepository.toggleLike)
+          .toHaveBeenCalledWith(new ToggleLikeComment({
+            threadId: useCasePayload.threadId,
+            commentId: useCasePayload.commentId,
+            liker: useCasePayload.liker,
+          }));
       expect(mockThreadRepository.verifyThreadAvailability)
           .toBeCalledWith(useCasePayload.threadId);
     });

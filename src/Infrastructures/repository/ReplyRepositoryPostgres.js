@@ -99,7 +99,9 @@ class ReplyRepositoryPostgres extends ReplyRepository {
       text: `SELECT replies.*, users.username
       FROM replies
       LEFT JOIN users ON replies.owner = users.id
-      WHERE comment_id = $1`,
+      WHERE comment_id = $1
+      ORDER BY date ASC
+      `,
       values: [commentId],
     };
 

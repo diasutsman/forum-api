@@ -167,5 +167,24 @@ class ThreadsHandler {
       message: 'berhasil menghapus balasan',
     };
   }
+
+  /**
+   * @param {Request} request
+   * @memberof ThreadsHandler
+   */
+  async putLikesHandler(request) {
+    const {threadId, commentId} = request.params;
+    const {id: liker} = request.auth.credentials;
+
+    /** @type {CommentUseCase} */
+    const commentUseCase = this._container.getInstance(CommentUseCase.name);
+    await commentUseCase.toggleLike({
+      threadId,
+      commentId,
+      liker,
+    });
+
+    return {status: 'success'};
+  }
 }
 module.exports = ThreadsHandler;
