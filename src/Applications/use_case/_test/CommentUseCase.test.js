@@ -175,7 +175,7 @@ describe('CommentUseCase', () => {
   });
 
   describe('toggleLike', () => {
-    it('should orchestrating like comment action correctly', () => {
+    it('should orchestrating like comment action correctly', async () => {
       // Arrange
       const useCasePayload = {
         threadId: 'thread-123',
@@ -192,6 +192,8 @@ describe('CommentUseCase', () => {
           .mockImplementation(() => Promise.resolve());
       mockCommentRepository.toggleLike = jest.fn()
           .mockImplementation(() => Promise.resolve());
+      mockCommentRepository.verifyCommentExists = jest.fn()
+          .mockImplementation(() => Promise.resolve());
 
       /** creating use case instance */
       const commentUseCase = new CommentUseCase({
@@ -200,11 +202,11 @@ describe('CommentUseCase', () => {
       });
 
       // Action
-      commentUseCase.toggleLike(useCasePayload);
+      await commentUseCase.toggleLike(useCasePayload);
 
       // Assert
       expect(mockCommentRepository.toggleLike)
-          .toHaveBeenCalledWith(new ToggleLikeComment({
+          .toBeCalledWith(new ToggleLikeComment({
             threadId: useCasePayload.threadId,
             commentId: useCasePayload.commentId,
             liker: useCasePayload.liker,

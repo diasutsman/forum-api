@@ -12,12 +12,15 @@ const DeleteComment =
 require('../../../Domains/comments/entities/DeleteComment');
 const AuthorizationError =
 require('../../../Commons/exceptions/AuthorizationError');
+const UsersLikesTableTestHelper =
+require('../../../../tests/UsersLikesTableTestHelper');
 
 describe('CommentRepositoryPostgres postgres', () => {
   afterEach(async () => {
     await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
+    await UsersLikesTableTestHelper.cleanTable();
   });
 
   beforeEach(async () => {
@@ -196,6 +199,73 @@ describe('CommentRepositoryPostgres postgres', () => {
         expect(comment.owner).toEqual('user-123');
         expect(comment.username).toEqual('user_123');
       });
+    });
+  });
+
+  describe('toggleLike function', () => {
+    it('should like comment when it is not liked', async () => {
+      // Arrange
+      const date = new Date();
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        content: 'content',
+        date: date,
+        threadId: 'thread-123',
+        owner: 'user-123',
+      });
+      const idGenerator = () => '123'; // stub!
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
+          pool, idGenerator,
+      );
+
+      // Action
+      await commentRepositoryPostgres.toggleLike({
+        commentId: 'comment-123',
+        liker: 'user-123',
+      });
+
+      // Assert
+      const commentLikes = await UsersLikesTableTestHelper
+          .findUsersLikesByCommentId('comment-123');
+      const userLikes = await UsersLikesTableTestHelper
+          .findUsersLikesByUserId('user-123');
+
+      expect(commentLikes).toHaveLength(1);
+      expect(userLikes).toHaveLength(1);
+    });
+    it('should dislike comment when it is liked', async () => {
+      // Arrange
+      const date = new Date();
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        content: 'content',
+        date: date,
+        threadId: 'thread-123',
+        owner: 'user-123',
+      });
+      await UsersLikesTableTestHelper.addUserLikes({
+        userId: 'user-123',
+        commentId: 'comment-123',
+      });
+      const idGenerator = () => '123'; // stub!
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
+          pool, idGenerator,
+      );
+
+      // Action
+      await commentRepositoryPostgres.toggleLike({
+        commentId: 'comment-123',
+        liker: 'user-123',
+      });
+
+      // Assert
+      const commentLikes = await UsersLikesTableTestHelper
+          .findUsersLikesByCommentId('comment-123');
+      const userLikes = await UsersLikesTableTestHelper
+          .findUsersLikesByUserId('user-123');
+
+      expect(commentLikes).toHaveLength(0);
+      expect(userLikes).toHaveLength(0);
     });
   });
 });
