@@ -56,7 +56,7 @@ class CommentRepositoryPostgres extends CommentRepository {
    * @param {string} owner
    * @memberof CommentRepositoryPostgres
    */
-  async _verifyComment(commentId, owner) {
+  async verifyCommentOwner(commentId, owner) {
     const query = {
       text: 'SELECT * FROM comments WHERE id = $1',
       values: [commentId],
@@ -97,7 +97,7 @@ class CommentRepositoryPostgres extends CommentRepository {
   async deleteComment(deleteComment) {
     const {commentId, owner} = deleteComment;
 
-    await this._verifyComment(commentId, owner);
+    await this.verifyCommentOwner(commentId, owner);
 
     const query = {
       text: 'UPDATE comments SET is_delete = true WHERE id = $1',

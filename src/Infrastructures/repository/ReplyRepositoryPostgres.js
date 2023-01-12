@@ -53,7 +53,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
    */
   async deleteReply(deleteReply) {
     const {replyId, owner} = deleteReply;
-    await this._verifyReply(replyId, owner);
+    await this.verifyReplyOwner(replyId, owner);
     const query = {
       text: 'UPDATE replies SET is_delete = true WHERE id = $1',
       values: [replyId],
@@ -67,7 +67,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
    * @param {string} owner
    * @memberof ReplyRepositoryPostgres
    */
-  async _verifyReply(replyId, owner) {
+  async verifyReplyOwner(replyId, owner) {
     const query = {
       text: 'SELECT * FROM replies WHERE id = $1',
       values: [replyId],
