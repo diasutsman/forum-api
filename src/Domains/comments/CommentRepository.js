@@ -45,6 +45,14 @@ class CommentRepository {
   async toggleLike(payload) {
     throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
+  /**
+   * @param {string} commentId
+   * @param {string} owner
+   * @memberof CommentRepository
+   */
+  async verifyCommentOwner(commentId, owner) {
+    throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
 }
 
 module.exports = CommentRepository;
