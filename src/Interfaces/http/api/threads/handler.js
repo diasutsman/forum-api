@@ -72,14 +72,14 @@ class ThreadsHandler {
    */
   async putLikesHandler(request) {
     const {threadId, commentId} = request.params;
-    const {id: liker} = request.auth.credentials;
+    const {id: userId} = request.auth.credentials;
 
     /** @type {CommentUseCase} */
     const commentUseCase = this._container.getInstance(CommentUseCase.name);
     await commentUseCase.toggleLike({
       threadId,
       commentId,
-      liker,
+      userId,
     });
 
     return {status: 'success'};

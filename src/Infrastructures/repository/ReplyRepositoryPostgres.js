@@ -28,7 +28,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   /**
    * @param {AddReply} addReply
-   * @return {AddedReply}
+   * @return {Promise<AddedReply>}
    * @memberof ReplyRepositoryPostgres
    */
   async addReply(addReply) {
@@ -86,12 +86,12 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   /**
    * @param {string} commentId
-   * @return {Array<{
+   * @return {Promise<Array<{
    *  id: string,
    *  date: string,
    *  content: string,
    *  username: string,
-   * }>}
+   * }>>}
    * @memberof ReplyRepositoryPostgres
    */
   async getCommentReplies(commentId) {

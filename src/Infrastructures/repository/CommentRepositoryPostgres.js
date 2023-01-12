@@ -30,7 +30,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   /**
    * @param {AddComment} addComment
-   * @return {AddedComment}
+   * @return {Promise<AddedComment>}
    * @memberof CommentRepositoryPostgres
    */
   async addComment(addComment) {
@@ -109,12 +109,12 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   /**
    * @param {string} threadId
-   * @return {Array<{
+   * @return {Promise<Array<{
    *  id: string,
    *  content: string,
    *  username: string,
    *  date: string,
-   * }>}
+   * }>>}
    * @memberof CommentRepositoryPostgres
    */
   async getThreadComments(threadId) {
@@ -144,13 +144,13 @@ class CommentRepositoryPostgres extends CommentRepository {
    * @memberof CommentRepositoryPostgres
    */
   async toggleLike(payload) {
-    const {commentId, liker} = payload;
+    const {commentId, userId} = payload;
 
     const query = {
       text: `
         SELECT * FROM users_likes WHERE comment_id = $1 AND user_id = $2
       `,
-      values: [commentId, liker],
+      values: [commentId, userId],
     };
 
     const {rowCount: isLiked} = await this._pool.query(query);
@@ -158,7 +158,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     if (isLiked) {
       const query = {
         text: `DELETE FROM users_likes WHERE comment_id = $1 AND user_id = $2`,
-        values: [commentId, liker],
+        values: [commentId, userId],
       };
 
       await this._pool.query(query);
@@ -166,7 +166,7 @@ class CommentRepositoryPostgres extends CommentRepository {
       const id = `likes-${this._idGenerator()}`;
       const query = {
         text: `INSERT INTO users_likes VALUES($1, $2, $3)`,
-        values: [id, liker, commentId],
+        values: [id, userId, commentId],
       };
 
       await this._pool.query(query);

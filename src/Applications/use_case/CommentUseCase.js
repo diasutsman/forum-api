@@ -63,7 +63,7 @@ class CommentUseCase {
    * @param {{
    *  threadId: string,
    *  commentId: string,
-   *  liker: string,
+   *  userId: string,
    * }} useCasePayload
    */
   async toggleLike(useCasePayload) {

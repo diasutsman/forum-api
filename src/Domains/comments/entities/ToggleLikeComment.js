@@ -7,14 +7,14 @@ class ToggleLikeComment {
    * @param {{
    *  threadId: string,
    *  commentId: string,
-   *  liker: string,
+   *  userId: string,
    * }} payload
    * @memberof ToggleLikeComment
    */
   constructor(payload) {
     this._verifyPayload(payload);
     this.commentId = payload.commentId;
-    this.liker = payload.liker;
+    this.userId = payload.userId;
     this.threadId = payload.threadId;
   }
 
@@ -22,19 +22,19 @@ class ToggleLikeComment {
    * @param {{
    *  threadId: string,
    *  commentId: string,
-   *  liker: string,
+   *  userId: string,
    * }} payload
    * @memberof ToggleLikeComment
    */
   _verifyPayload(payload) {
-    const {threadId, commentId, liker} = payload;
-    if (!threadId || !commentId || !liker) {
+    const {threadId, commentId, userId} = payload;
+    if (!threadId || !commentId || !userId) {
       throw new Error('TOGGLE_LIKE_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
     }
     if (
       typeof commentId !== 'string' ||
       typeof threadId !== 'string' ||
-      typeof liker !== 'string'
+      typeof userId !== 'string'
     ) {
       throw new Error('TOGGLE_LIKE_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }

@@ -5,7 +5,7 @@ describe('ToggleLikeComment entities', () => {
     // Arrange
     const payload = {
       threadId: 'thread-123',
-      liker: 'user-123',
+      userId: 'user-123',
     };
 
     // Action & Assert
@@ -18,7 +18,7 @@ describe('ToggleLikeComment entities', () => {
     const payload = {
       threadId: true,
       commentId: 123,
-      liker: ['user-123'],
+      userId: ['user-123'],
     };
 
     // Action & Assert
@@ -31,7 +31,7 @@ describe('ToggleLikeComment entities', () => {
     const payload = {
       threadId: 'thread-123',
       commentId: 'comment-123',
-      liker: 'user-123',
+      userId: 'user-123',
     };
 
     // Action
@@ -41,6 +41,6 @@ describe('ToggleLikeComment entities', () => {
     expect(toggleLikeComment).toBeInstanceOf(ToggleLikeComment);
     expect(toggleLikeComment.threadId).toEqual(payload.threadId);
     expect(toggleLikeComment.commentId).toEqual(payload.commentId);
-    expect(toggleLikeComment.liker).toEqual(payload.liker);
+    expect(toggleLikeComment.userId).toEqual(payload.userId);
   });
 });

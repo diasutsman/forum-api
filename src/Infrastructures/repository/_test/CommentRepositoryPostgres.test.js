@@ -221,7 +221,7 @@ describe('CommentRepositoryPostgres postgres', () => {
       // Action
       await commentRepositoryPostgres.toggleLike({
         commentId: 'comment-123',
-        liker: 'user-123',
+        userId: 'user-123',
       });
 
       // Assert
@@ -255,7 +255,7 @@ describe('CommentRepositoryPostgres postgres', () => {
       // Action
       await commentRepositoryPostgres.toggleLike({
         commentId: 'comment-123',
-        liker: 'user-123',
+        userId: 'user-123',
       });
 
       // Assert

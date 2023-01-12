@@ -180,7 +180,7 @@ describe('CommentUseCase', () => {
       const useCasePayload = {
         threadId: 'thread-123',
         commentId: 'comment-123',
-        liker: 'user-123',
+        userId: 'user-123',
       };
 
       /** creating dependency of use case */
@@ -209,7 +209,7 @@ describe('CommentUseCase', () => {
           .toBeCalledWith(new ToggleLikeComment({
             threadId: useCasePayload.threadId,
             commentId: useCasePayload.commentId,
-            liker: useCasePayload.liker,
+            userId: useCasePayload.userId,
           }));
       expect(mockThreadRepository.verifyThreadAvailability)
           .toBeCalledWith(useCasePayload.threadId);
