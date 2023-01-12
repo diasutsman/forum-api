@@ -6,8 +6,6 @@
  */
 const AddThreadUseCase =
 require('../../../../Applications/use_case/ThreadUseCase');
-const CommentUseCase =
-require('../../../../Applications/use_case/CommentUseCase');
 const ThreadUseCase =
 require('../../../../Applications/use_case/ThreadUseCase');
 const autoBind = require('auto-bind');
@@ -64,25 +62,6 @@ class ThreadsHandler {
         thread,
       },
     };
-  }
-
-  /**
-   * @param {Request} request
-   * @memberof ThreadsHandler
-   */
-  async putLikesHandler(request) {
-    const {threadId, commentId} = request.params;
-    const {id: userId} = request.auth.credentials;
-
-    /** @type {CommentUseCase} */
-    const commentUseCase = this._container.getInstance(CommentUseCase.name);
-    await commentUseCase.toggleLike({
-      threadId,
-      commentId,
-      userId,
-    });
-
-    return {status: 'success'};
   }
 }
 module.exports = ThreadsHandler;
