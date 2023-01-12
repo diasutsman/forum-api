@@ -32,5 +32,13 @@ class ReplyRepository {
   async getCommentReplies(commentId) {
     throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
+  /**
+   * @param {string} commentId
+   * @param {string} owner
+   * @memberof ReplyRepository
+   */
+  async verifyReplyOwner(commentId, owner) {
+    throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
 }
 module.exports = ReplyRepository;
