@@ -81,7 +81,7 @@ class ThreadUseCase {
                 date: reply.date.toISOString(),
                 username: reply.username,
               }),
-              ).sort((a, b) => a.date.localeCompare(b.date)),
+              ),
             };
           }),
       ),
