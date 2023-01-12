@@ -169,10 +169,6 @@ describe('ThreadUseCase', () => {
       // Action
       const thread = await threadUseCase.getThreadById(threadId);
       // Assert
-      console.log({
-        thread,
-        expectedThread,
-      });
       expect(thread).toStrictEqual(expectedThread);
       expect(mockThreadRepository.getThreadById).toBeCalledWith(threadId);
       expect(mockCommentRepository.getThreadComments)
