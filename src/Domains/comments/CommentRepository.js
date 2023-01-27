@@ -38,6 +38,21 @@ class CommentRepository {
   async verifyCommentExists(id) {
     throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
+  /**
+   * @param {string} payload
+   * @memberof CommentRepository
+   */
+  async toggleLike(payload) {
+    throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
+  /**
+   * @param {string} commentId
+   * @param {string} owner
+   * @memberof CommentRepository
+   */
+  async verifyCommentOwner(commentId, owner) {
+    throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
 }
 
 module.exports = CommentRepository;

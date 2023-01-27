@@ -6,6 +6,8 @@
  * } AddedComment
  */
 const AddComment = require('../../Domains/comments/entities/AddComment');
+const ToggleLikeComment =
+  require('../../Domains/comments/entities/ToggleLikeComment');
 
 /**
  * CommentUseCase
@@ -55,6 +57,25 @@ class CommentUseCase {
     );
 
     await this._commentRepository.deleteComment(useCasePayload);
+  }
+
+  /**
+   * @param {{
+   *  threadId: string,
+   *  commentId: string,
+   *  userId: string,
+   * }} useCasePayload
+   */
+  async toggleLike(useCasePayload) {
+    const toggleLikeComment = new ToggleLikeComment(useCasePayload);
+    await this._threadRepository
+        .verifyThreadAvailability(toggleLikeComment.threadId);
+
+    await this._commentRepository.verifyCommentExists(
+        toggleLikeComment.commentId,
+    );
+
+    await this._commentRepository.toggleLike(toggleLikeComment);
   }
 }
 

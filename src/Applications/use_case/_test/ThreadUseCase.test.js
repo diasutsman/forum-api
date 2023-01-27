@@ -88,6 +88,7 @@ describe('ThreadUseCase', () => {
                 username: 'user_123',
               },
             ],
+            likeCount: 2,
           },
           {
             id: 'comment-124',
@@ -95,6 +96,7 @@ describe('ThreadUseCase', () => {
             date: date.toISOString(),
             username: 'user_123',
             replies: [],
+            likeCount: 2,
           },
         ],
       };
@@ -122,6 +124,7 @@ describe('ThreadUseCase', () => {
               thread_id: 'thread-123',
               is_delete: false,
               username: 'user_123',
+              like_count: '2',
             },
             {
               id: 'comment-124',
@@ -131,6 +134,7 @@ describe('ThreadUseCase', () => {
               thread_id: 'thread-123',
               is_delete: true,
               username: 'user_123',
+              like_count: '2',
             },
           ]));
       mockReplyRepository.getCommentReplies = jest.fn()

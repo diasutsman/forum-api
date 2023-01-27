@@ -4,16 +4,14 @@
  * @typedef {import('@hapi/hapi').ResponseToolkit} ResponseToolkit
  * @typedef {import('@hapi/hapi').ResponseObject} ResponseObject
  */
-const AddThreadUseCase =
-require('../../../../Applications/use_case/ThreadUseCase');
-const ThreadUseCase =
-require('../../../../Applications/use_case/ThreadUseCase');
+const CommentUseCase =
+require('../../../../Applications/use_case/CommentUseCase');
 const autoBind = require('auto-bind');
 
 /**
- * @class ThreadsHandler
+ * @class ThreadCommentsHandler
  */
-class ThreadsHandler {
+class CommentsHandler {
   /**
    * @param {Container} container
    */
@@ -28,17 +26,19 @@ class ThreadsHandler {
    * @return {ResponseObject}
    * @memberof ThreadsHandler
    */
-  async postThreadHandler(request, h) {
-    const addThreadUseCase = this._container.getInstance(AddThreadUseCase.name);
-    const addedThread = await addThreadUseCase.addThread({
+  async postCommentHandler(request, h) {
+    /** @type {CommentUseCase} */
+    const commentUseCase = this._container.getInstance(CommentUseCase.name);
+    const addedComment = await commentUseCase.addComment({
       ...request.payload,
       owner: request.auth.credentials.id,
+      threadId: request.params.threadId,
     });
 
     const response = h.response({
       status: 'success',
       data: {
-        addedThread,
+        addedComment,
       },
     });
     response.code(201);
@@ -50,18 +50,23 @@ class ThreadsHandler {
    * @return {ResponseObject}
    * @memberof ThreadsHandler
    */
-  async getThreadByIdHandler(request) {
-    const {threadId: id} = request.params;
-    /** @type {ThreadUseCase} */
-    const threadUseCase = this._container.getInstance(ThreadUseCase.name);
-    const thread = await threadUseCase.getThreadById(id);
+  async deleteCommentByIdHandler(request) {
+    const {threadId, commentId} = request.params;
+    const {id: credentialId} = request.auth.credentials;
+
+    /** @type {CommentUseCase} */
+    const commentUseCase = this._container.getInstance(CommentUseCase.name);
+    await commentUseCase.deleteComment({
+      commentId,
+      threadId,
+      owner: credentialId,
+    });
 
     return {
       status: 'success',
-      data: {
-        thread,
-      },
+      message: 'berhasil menghapus komentar',
     };
   }
 }
-module.exports = ThreadsHandler;
+
+module.exports = CommentsHandler;

@@ -28,7 +28,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   /**
    * @param {AddReply} addReply
-   * @return {AddedReply}
+   * @return {Promise<AddedReply>}
    * @memberof ReplyRepositoryPostgres
    */
   async addReply(addReply) {
@@ -53,7 +53,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
    */
   async deleteReply(deleteReply) {
     const {replyId, owner} = deleteReply;
-    await this._verifyReply(replyId, owner);
+    await this.verifyReplyOwner(replyId, owner);
     const query = {
       text: 'UPDATE replies SET is_delete = true WHERE id = $1',
       values: [replyId],
@@ -67,7 +67,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
    * @param {string} owner
    * @memberof ReplyRepositoryPostgres
    */
-  async _verifyReply(replyId, owner) {
+  async verifyReplyOwner(replyId, owner) {
     const query = {
       text: 'SELECT * FROM replies WHERE id = $1',
       values: [replyId],
@@ -86,12 +86,12 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   /**
    * @param {string} commentId
-   * @return {Array<{
+   * @return {Promise<Array<{
    *  id: string,
    *  date: string,
    *  content: string,
    *  username: string,
-   * }>}
+   * }>>}
    * @memberof ReplyRepositoryPostgres
    */
   async getCommentReplies(commentId) {
@@ -100,7 +100,8 @@ class ReplyRepositoryPostgres extends ReplyRepository {
       FROM replies
       LEFT JOIN users ON replies.owner = users.id
       WHERE comment_id = $1
-      ORDER BY date ASC`,
+      ORDER BY date ASC
+      `,
       values: [commentId],
     };
 

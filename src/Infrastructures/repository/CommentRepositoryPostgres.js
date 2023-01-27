@@ -30,7 +30,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   /**
    * @param {AddComment} addComment
-   * @return {AddedComment}
+   * @return {Promise<AddedComment>}
    * @memberof CommentRepositoryPostgres
    */
   async addComment(addComment) {
@@ -56,7 +56,7 @@ class CommentRepositoryPostgres extends CommentRepository {
    * @param {string} owner
    * @memberof CommentRepositoryPostgres
    */
-  async _verifyComment(commentId, owner) {
+  async verifyCommentOwner(commentId, owner) {
     const query = {
       text: 'SELECT * FROM comments WHERE id = $1',
       values: [commentId],
@@ -97,7 +97,7 @@ class CommentRepositoryPostgres extends CommentRepository {
   async deleteComment(deleteComment) {
     const {commentId, owner} = deleteComment;
 
-    await this._verifyComment(commentId, owner);
+    await this.verifyCommentOwner(commentId, owner);
 
     const query = {
       text: 'UPDATE comments SET is_delete = true WHERE id = $1',
@@ -109,26 +109,68 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   /**
    * @param {string} threadId
-   * @return {Array<{
+   * @return {Promise<Array<{
    *  id: string,
    *  content: string,
    *  username: string,
    *  date: string,
-   * }>}
+   * }>>}
    * @memberof CommentRepositoryPostgres
    */
   async getThreadComments(threadId) {
     const query = {
-      text: `SELECT comments.*, users.username
-      FROM comments
-      LEFT JOIN users ON comments.owner = users.id
-      WHERE thread_id = $1
-      ORDER BY date ASC`,
+      text: `
+        SELECT comments.*, users.username,
+        COUNT(users_likes.user_id) AS like_count
+        FROM comments
+        LEFT JOIN users ON comments.owner = users.id
+        LEFT JOIN users_likes ON comments.id = users_likes.comment_id
+        WHERE thread_id = $1
+        GROUP BY comments.id, users.id
+        ORDER BY comments.date ASC
+      `,
       values: [threadId],
     };
 
     const {rows} = await this._pool.query(query);
     return rows;
+  }
+
+  /**
+   * @param {{
+   *  commentId : string,
+   *  userId : string,
+   * }} payload
+   * @memberof CommentRepositoryPostgres
+   */
+  async toggleLike(payload) {
+    const {commentId, userId} = payload;
+
+    const query = {
+      text: `
+        SELECT * FROM users_likes WHERE comment_id = $1 AND user_id = $2
+      `,
+      values: [commentId, userId],
+    };
+
+    const {rowCount: isLiked} = await this._pool.query(query);
+
+    if (isLiked) {
+      const query = {
+        text: `DELETE FROM users_likes WHERE comment_id = $1 AND user_id = $2`,
+        values: [commentId, userId],
+      };
+
+      await this._pool.query(query);
+    } else {
+      const id = `likes-${this._idGenerator()}`;
+      const query = {
+        text: `INSERT INTO users_likes VALUES($1, $2, $3)`,
+        values: [id, userId, commentId],
+      };
+
+      await this._pool.query(query);
+    }
   }
 }
 

@@ -3,8 +3,6 @@
  */
 
 /**
- *
- *
  * @class ThreadRepository
  */
 class ThreadRepository {

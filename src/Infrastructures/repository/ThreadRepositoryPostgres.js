@@ -28,7 +28,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
 
   /**
    * @param {AddThread} addThread
-   * @return {AddedThread}
+   * @return {Promise<AddedThread>}
    * @memberof ThreadRepositoryPostgres
    */
   async addThread(addThread) {
@@ -48,13 +48,13 @@ class ThreadRepositoryPostgres extends ThreadRepository {
 
   /**
    * @param {string} id
-   * @return {{
+   * @return {Promise<{
    *  id: string,
    *  title: string,
    *  body: string,
    *  date: string,
    *  username: string,
-   * }}
+   * }>}
    * @memberof ThreadRepositoryPostgres
    */
   async getThreadById(id) {
