@@ -3,19 +3,19 @@
  */
 class PasswordHash {
   /**
-   * @param {String} password
+   * @param {string} password
    */
-  async hash(password) {
+  async hash(password:string) {
     throw new Error('PASSWORD_HASH.METHOD_NOT_IMPLEMENTED');
   }
 
   /**
-   * @param {String} plain
-   * @param {String} encrypted
+   * @param {string} plain
+   * @param {string} encrypted
    */
-  async comparePassword(plain, encrypted) {
+  async comparePassword(plain:string, encrypted:string) {
     throw new Error('PASSWORD_HASH.METHOD_NOT_IMPLEMENTED');
   }
 }
 
-module.exports = PasswordHash;
+export default PasswordHash;

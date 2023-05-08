@@ -1,36 +1,34 @@
+import {TokenPayload} from 'src/Commons/types';
+
 /**
  * AuthenticationTokenManager
  */
 class AuthenticationTokenManager {
   /**
-   * Create refresh token
-   * @param {{id: String}} payload
+   * @param {TokenPayload} payload
    */
-  async createRefreshToken(payload) {
+  async createRefreshToken(payload: TokenPayload): Promise<String> {
     throw new Error('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED');
   }
 
   /**
-   * Create access token
-   * @param {{id: String}} payload
+   * @param {TokenPayload} payload
    */
-  async createAccessToken(payload) {
+  async createAccessToken(payload: TokenPayload): Promise<String> {
     throw new Error('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED');
   }
 
   /**
-   * Verify refresh token
-   * @param {{id: String}} token
+   * @param {string} token
    */
-  async verifyRefreshToken(token) {
+  async verifyRefreshToken(token: string) {
     throw new Error('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED');
   }
 
   /**
-   * Decode token payload
-   * @param {{id: String}} token
+   * @param {string} token
    */
-  async decodePayload() {
+  async decodePayload(token: string): Promise<TokenPayload> {
     throw new Error('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED');
   }
 }
