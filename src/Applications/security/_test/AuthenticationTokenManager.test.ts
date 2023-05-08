@@ -1,4 +1,4 @@
-const AuthenticationTokenManager = require('../AuthenticationTokenManager');
+import AuthenticationTokenManager from '../AuthenticationTokenManager';
 
 describe('AuthenticationTokenManager interface', () => {
   it('should throw error when invoke unimplemented method', async () => {
@@ -6,9 +6,9 @@ describe('AuthenticationTokenManager interface', () => {
     const tokenManager = new AuthenticationTokenManager();
 
     // Action & Assert
-    await expect(tokenManager.createAccessToken('')).rejects
+    await expect(tokenManager.createAccessToken('' as any)).rejects
         .toThrowError('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED');
-    await expect(tokenManager.createRefreshToken('')).rejects
+    await expect(tokenManager.createRefreshToken('' as any)).rejects
         .toThrowError('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED');
     await expect(tokenManager.verifyRefreshToken('')).rejects
         .toThrowError('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED');
