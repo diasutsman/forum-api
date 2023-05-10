@@ -1,11 +1,11 @@
-const UserRepository = require('../../../Domains/users/UserRepository');
-const AuthenticationRepository =
-  require('../../../Domains/authentications/AuthenticationRepository');
-const AuthenticationTokenManager =
-  require('../../security/AuthenticationTokenManager');
-const PasswordHash = require('../../security/PasswordHash');
-const LoginUserUseCase = require('../LoginUserUseCase');
-const NewAuth = require('../../../Domains/authentications/entities/NewAuth');
+import UserRepository from '../../../Domains/users/UserRepository';
+import AuthenticationRepository
+  from '../../../Domains/authentications/AuthenticationRepository';
+import AuthenticationTokenManager
+  from '../../security/AuthenticationTokenManager';
+import PasswordHash from '../../security/PasswordHash';
+import LoginUserUseCase from '../LoginUserUseCase';
+import NewAuth from '../../../Domains/authentications/entities/NewAuth';
 
 describe('GetAuthenticationUseCase', () => {
   it('should orchestrating the get authentication action correctly',

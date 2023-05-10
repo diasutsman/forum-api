@@ -7,14 +7,14 @@ class AuthenticationTokenManager {
   /**
    * @param {TokenPayload} payload
    */
-  async createRefreshToken(payload: TokenPayload): Promise<String> {
+  async createRefreshToken(payload: TokenPayload): Promise<string> {
     throw new Error('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED');
   }
 
   /**
    * @param {TokenPayload} payload
    */
-  async createAccessToken(payload: TokenPayload): Promise<String> {
+  async createAccessToken(payload: TokenPayload): Promise<string> {
     throw new Error('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED');
   }
 

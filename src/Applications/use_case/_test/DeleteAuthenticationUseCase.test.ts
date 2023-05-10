@@ -1,16 +1,17 @@
-const AuthenticationRepository =
-  require('../../../Domains/authentications/AuthenticationRepository');
-const DeleteAuthenticationUseCase = require('../DeleteAuthenticationUseCase');
+import AuthenticationRepository from
+  '../../../Domains/authentications/AuthenticationRepository';
+import DeleteAuthenticationUseCase from '../DeleteAuthenticationUseCase';
 
 describe('DeleteAuthenticationUseCase', () => {
   it('should throw error if use case payload not contain refresh token',
       async () => {
       // Arrange
         const useCasePayload = {};
-        const deleteAuthenticationUseCase = new DeleteAuthenticationUseCase({});
+        const deleteAuthenticationUseCase =
+            new DeleteAuthenticationUseCase({} as any);
 
         // Action & Assert
-        await expect(deleteAuthenticationUseCase.execute(useCasePayload))
+        await expect(deleteAuthenticationUseCase.execute(useCasePayload as any))
             .rejects
             .toThrowError(
                 'DELETE_AUTHENTICATION_USE_CASE.NOT_CONTAIN_REFRESH_TOKEN',
@@ -22,12 +23,13 @@ describe('DeleteAuthenticationUseCase', () => {
     const useCasePayload = {
       refreshToken: 123,
     };
-    const deleteAuthenticationUseCase = new DeleteAuthenticationUseCase({});
+    const deleteAuthenticationUseCase =
+      new DeleteAuthenticationUseCase({} as any);
     const errorMessage =
       'DELETE_AUTHENTICATION_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION';
 
     // Action & Assert
-    await expect(deleteAuthenticationUseCase.execute(useCasePayload))
+    await expect(deleteAuthenticationUseCase.execute(useCasePayload as any))
         .rejects
         .toThrowError(
             errorMessage,

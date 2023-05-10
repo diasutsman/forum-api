@@ -1,15 +1,26 @@
+type Payload = {
+  threadId: string;
+  commentId: string;
+  replyId: string;
+  owner: string;
+}
+
 /**
  *
  *
  * @class DeleteReply
  */
 class DeleteReply {
+  threadId: string;
+  commentId: string;
+  replyId: string;
+  owner: string;
   /**
    * Creates an instance of DeleteReply.
-   * @param {*} payload
+   * @param {Payload} payload
    * @memberof DeleteReply
    */
-  constructor(payload) {
+  constructor(payload: Payload) {
     this._verifyPayload(payload);
     const {threadId, commentId, replyId, owner} = payload;
     this.threadId = threadId;
@@ -19,15 +30,10 @@ class DeleteReply {
   }
 
   /**
-   * @param {{
-   *  threadId: string,
-   *  commentId: string,
-   *  replyId: string,
-   *  owner: string,
-   * }} payload
+   * @param {Payload} payload
    * @memberof DeleteReply
    */
-  _verifyPayload({threadId, commentId, replyId, owner}) {
+  _verifyPayload({threadId, commentId, replyId, owner}: Payload) {
     if (!threadId || !commentId || !replyId || !owner) {
       throw new Error('DELETE_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
     }
@@ -42,4 +48,4 @@ class DeleteReply {
     }
   }
 }
-module.exports = DeleteReply;
+export default DeleteReply;

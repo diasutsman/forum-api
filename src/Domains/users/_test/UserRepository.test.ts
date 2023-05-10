@@ -1,4 +1,4 @@
-const UserRepository = require('../UserRepository');
+import UserRepository from '../UserRepository';
 
 describe('UserRepository interface', () => {
   it('should throw error when invoke abstract behavior', async () => {
@@ -6,7 +6,7 @@ describe('UserRepository interface', () => {
     const userRepository = new UserRepository();
 
     // Action and Assert
-    await expect(userRepository.addUser({}))
+    await expect(userRepository.addUser({} as any))
         .rejects.toThrowError('USER_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     await expect(userRepository.verifyAvailableUsername(''))
         .rejects.toThrowError('USER_REPOSITORY.METHOD_NOT_IMPLEMENTED');

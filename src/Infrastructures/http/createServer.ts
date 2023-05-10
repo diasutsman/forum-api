@@ -1,15 +1,18 @@
-const Hapi = require('@hapi/hapi');
-const ClientError = require('../../Commons/exceptions/ClientError');
-const DomainErrorTranslator =
-require('../../Commons/exceptions/DomainErrorTranslator');
-const Jwt = require('@hapi/jwt');
+import Hapi from '@hapi/hapi';
+import Jwt from '@hapi/jwt';
 
 // Plugin
-const users = require('../../Interfaces/http/api/users');
-const authentications = require('../../Interfaces/http/api/authentications');
-const threads = require('../../Interfaces/http/api/threads');
+import users from '../../Interfaces/http/api/users';
+import authentications from '../../Interfaces/http/api/authentications';
+import threads from '../../Interfaces/http/api/threads';
 
-const createServer = async (container) => {
+// Error Handler
+import ClientError from '../../Commons/exceptions/ClientError';
+import DomainErrorTranslator from '../../Commons/exceptions/DomainErrorTranslator';
+
+import { Container } from "../container";
+
+const createServer = async (container: Container) => {
   const server = Hapi.server({
     host: process.env.HOST,
     port: process.env.PORT,
@@ -18,8 +21,8 @@ const createServer = async (container) => {
   // Register External Plugin
   await server.register([
     {
-      plugin: Jwt,
-    },
+      plugin: Jwt as any,
+    }
   ]);
 
   // Define the authentication strategy jwt
@@ -31,7 +34,9 @@ const createServer = async (container) => {
       sub: false,
       maxAgeSec: process.env.ACCCESS_TOKEN_AGE,
     },
-    validate: (artifacts) => ({
+    validate: (artifacts: {
+      decoded: {payload: {id: string}};
+    }) => ({
       isValid: true,
       credential: {
         id: artifacts.decoded.payload.id,
@@ -75,7 +80,7 @@ const createServer = async (container) => {
 
       // mempertahankan penanganan client error
       // oleh hapi secara native, seperti 404, etc.
-      if (!translatedError.isServer) {
+      if (!(translatedError as any).isServer) {
         return h.continue;
       }
 
@@ -98,4 +103,4 @@ const createServer = async (container) => {
   return server;
 };
 
-module.exports = createServer;
+export default createServer;

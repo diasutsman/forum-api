@@ -1,33 +1,39 @@
-/**
- * @typedef {import('../../Domains/users/UserRepository')} UserRepository
- * @typedef {import('../../Domains/authentications/AuthenticationRepository')
- * } AuthenticationRepository
- * @typedef {import('../../Applications/security/AuthenticationTokenManager')
- * @typedef {import('../../Applications/security/PasswordHash')} PasswordHash
- * } AuthenticationTokenManager
- */
-const UserLogin = require('../../Domains/users/entities/UserLogin');
-const NewAuthentication =
-  require('../../Domains/authentications/entities/NewAuth');
+import UserLogin from '../../Domains/users/entities/UserLogin';
+import NewAuthentication from '../../Domains/authentications/entities/NewAuth';
+import UserRepository from 'src/Domains/users/UserRepository';
+import AuthenticationRepository
+  from 'src/Domains/authentications/AuthenticationRepository';
+import AuthenticationTokenManager from '../security/AuthenticationTokenManager';
+import PasswordHash from '../security/PasswordHash';
+
+type Dependencies = {
+  userRepository: UserRepository;
+  authenticationRepository: AuthenticationRepository;
+  authenticationTokenManager: AuthenticationTokenManager;
+  passwordHash: PasswordHash;
+};
+type LoginPayload = {
+  username: string;
+  password: string;
+};
 
 /**
  * LoginUserUseCase
  */
 class LoginUserUseCase {
+  private _userRepository: UserRepository;
+  private _authenticationRepository: AuthenticationRepository;
+  private _authenticationTokenManager: AuthenticationTokenManager;
+  private _passwordHash: PasswordHash;
   /**
-   * @param {{
-   *  userRepository: UserRepository,
-   *  authenticationRepository: AuthenticationRepository,
-   *  authenticationTokenManager: AuthenticationTokenManager,
-   *  passwordHash: PasswordHash
-   * }} params
+   * @param {Dependencies} params
    */
   constructor({
     userRepository,
     authenticationRepository,
     authenticationTokenManager,
     passwordHash,
-  }) {
+  }: Dependencies) {
     this._userRepository = userRepository;
     this._authenticationRepository = authenticationRepository;
     this._authenticationTokenManager = authenticationTokenManager;
@@ -42,7 +48,7 @@ class LoginUserUseCase {
    * @return {Promise<NewAuthentication>}
    * @memberof LoginUserUseCase
    */
-  async execute(useCasePayload) {
+  async execute(useCasePayload: LoginPayload) {
     const {username, password} = new UserLogin(useCasePayload);
 
     const encryptedPassword =
@@ -70,4 +76,4 @@ class LoginUserUseCase {
   }
 }
 
-module.exports = LoginUserUseCase;
+export default LoginUserUseCase;

@@ -1,10 +1,9 @@
-const CommentRepository =
-require('../../../Domains/comments/CommentRepository');
-const ReplyRepository = require('../../../Domains/replies/ReplyRepository');
-const AddedThread = require('../../../Domains/threads/entities/AddedThread');
-const AddThread = require('../../../Domains/threads/entities/AddThread');
-const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
-const ThreadUseCase = require('../ThreadUseCase');
+import CommentRepository from '../../../Domains/comments/CommentRepository';
+import ReplyRepository from '../../../Domains/replies/ReplyRepository';
+import AddedThread from '../../../Domains/threads/entities/AddedThread';
+import AddThread from '../../../Domains/threads/entities/AddThread';
+import ThreadRepository from '../../../Domains/threads/ThreadRepository';
+import ThreadUseCase from '../ThreadUseCase';
 
 describe('ThreadUseCase', () => {
   /**
@@ -24,6 +23,7 @@ describe('ThreadUseCase', () => {
         id: 'thread-123',
         title: useCasePayload.title,
         owner: 'user-123',
+        body: 'body',
       });
 
       /** creating dependency of use case */
@@ -35,11 +35,14 @@ describe('ThreadUseCase', () => {
             id: 'thread-123',
             title: useCasePayload.title,
             owner: 'user-123',
+            body: 'body'
           })));
 
       /** creating use case instance */
       const threadUseCase = new ThreadUseCase({
         threadRepository: mockThreadRepository,
+        commentRepository: {} as any,
+        replyRepository: {} as any,
       });
 
       // Action

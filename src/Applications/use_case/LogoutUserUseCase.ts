@@ -1,8 +1,11 @@
+import {RefreshPayload} from 'src/Commons/types';
+import AuthenticationRepository
+  from 'src/Domains/authentications/AuthenticationRepository';
 
-/**
- * @typedef {import('../../Domains/authentications/AuthenticationRepository')
- * } AuthenticationRepository
- */
+type Dependencies = {
+  authenticationRepository: AuthenticationRepository;
+};
+
 /**
  *
  *
@@ -10,26 +13,23 @@
  *
  */
 class LogoutUserUseCase {
+  private _authenticationRepository: AuthenticationRepository;
   /**
    * Creates an instance of LogoutUserUseCase.
-   * @param {{
-   *  authenticationRepository: AuthenticationRepository
-   * }} params
+   * @param {Dependencies} params
    * @memberof LogoutUserUseCase
    */
   constructor({
     authenticationRepository,
-  }) {
+  }: Dependencies) {
     this._authenticationRepository = authenticationRepository;
   }
 
   /**
-   * @param {{
-   *  refreshToken: string
-   * }} useCasePayload
+   * @param {RefreshPayload} useCasePayload
    * @memberof LogoutUserUseCase
    */
-  async execute(useCasePayload) {
+  async execute(useCasePayload: RefreshPayload) {
     this._validatePayload(useCasePayload);
     const {refreshToken} = useCasePayload;
     await this._authenticationRepository.checkAvailabilityToken(refreshToken);
@@ -37,12 +37,10 @@ class LogoutUserUseCase {
   }
 
   /**
-   * @param {{
-   *  refreshToken: string
-   * }} payload
+   * @param {RefreshPayload} payload
    * @memberof LogoutUserUseCase
    */
-  _validatePayload(payload) {
+  _validatePayload(payload: RefreshPayload) {
     const {refreshToken} = payload;
     if (!refreshToken) {
       throw new Error(
@@ -59,4 +57,4 @@ class LogoutUserUseCase {
   }
 }
 
-module.exports = LogoutUserUseCase;
+export default LogoutUserUseCase;

@@ -1,4 +1,4 @@
-const AddedThread = require('../AddedThread');
+import AddedThread from '../AddedThread';
 
 describe('AddedThread entities', () => {
   it('should throw error when payload not contain needed property', () => {
@@ -9,7 +9,7 @@ describe('AddedThread entities', () => {
     };
 
     // Action & Assert
-    expect(() => new AddedThread(payload))
+    expect(() => new AddedThread(payload as any))
         .toThrowError('ADDED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
@@ -22,7 +22,7 @@ describe('AddedThread entities', () => {
     };
 
     // Action & Assert
-    expect(() => new AddedThread(payload))
+    expect(() => new AddedThread(payload as any))
         .toThrowError('ADDED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
@@ -32,6 +32,7 @@ describe('AddedThread entities', () => {
       id: 'thread-123',
       title: 'title',
       owner: 'owner',
+      body: 'body',
     };
 
     // Action
@@ -42,5 +43,6 @@ describe('AddedThread entities', () => {
     expect(addedThread.id).toEqual(payload.id);
     expect(addedThread.title).toEqual(payload.title);
     expect(addedThread.owner).toEqual(payload.owner);
+    expect(addedThread.body).toEqual(payload.body);
   });
 });

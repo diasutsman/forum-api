@@ -1,17 +1,22 @@
+type Payload = {
+    username: string;
+    password: string;
+    fullname: string;
+}
+
 /**
  * @class RegisterUser
  */
 class RegisterUser {
+  username: string;
+  password: string;
+  fullname: string;
   /**
    * Creates an instance of RegisterUser.
-   * @param {{
-   *  username: string,
-   *  password: string,
-   *  fullname: string,
-   * }} payload
+   * @param {Payload} payload
    * @memberof RegisterUser
    */
-  constructor(payload) {
+  constructor(payload: Payload) {
     this._verifyPayload(payload);
 
     const {username, password, fullname} = payload;
@@ -22,14 +27,10 @@ class RegisterUser {
   }
 
   /**
-   * @param {{
-   *  username: string,
-   *  password: string,
-   *  fullname: string,
-   * }} payload
+   * @param {Payload} payload
    * @memberof RegisterUser
    */
-  _verifyPayload({username, password, fullname}) {
+  _verifyPayload({username, password, fullname}: Payload) {
     if (!username || !password || !fullname) {
       throw new Error('REGISTER_USER.NOT_CONTAIN_NEEDED_PROPERTY');
     }
@@ -52,4 +53,4 @@ class RegisterUser {
   }
 }
 
-module.exports = RegisterUser;
+export default RegisterUser;

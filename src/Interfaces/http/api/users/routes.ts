@@ -1,14 +1,7 @@
-/**
- * @typedef {import('./handler')} UsersHandler
- * @typedef {import('@hapi/hapi').ServerRoute} ServerRoute
- */
+import { ReqRefDefaults, ServerRoute } from "@hapi/hapi";
+import Handler from "./handler";
 
-/**
- *
- * @param {UsersHandler} handler
- * @return {ServerRoute[]}
- */
-const routes = (handler) => ([
+const routes = (handler: Handler): ServerRoute<ReqRefDefaults> | ServerRoute<ReqRefDefaults>[] => ([
   {
     method: 'POST',
     path: '/users',
@@ -16,4 +9,4 @@ const routes = (handler) => ([
   },
 ]);
 
-module.exports = routes;
+export default routes;

@@ -1,26 +1,23 @@
-/**
- * @typedef {import('../../Infrastructures/database/postgres/pool')} Pool
- * @typedef {import('nanoid')} nanoid
- * @typedef {import('../../Domains/users/entities/RegisterUser')} RegisterUser
- * @typedef {import('../../Domains/users/entities/RegisteredUser')
- * } RegisteredUser
- */
-const InvariantError = require('../../Commons/exceptions/InvariantError');
-const RegisteredUser = require('../../Domains/users/entities/RegisteredUser');
-const UserRepository = require('../../Domains/users/UserRepository');
+import RegisterUser from 'src/Domains/users/entities/RegisterUser';
+import InvariantError from '../../Commons/exceptions/InvariantError';
+import RegisteredUser from '../../Domains/users/entities/RegisteredUser';
+import UserRepository from '../../Domains/users/UserRepository';
+import { Pool } from 'pg'; 
 
 /**
  * @class UserRepositoryPostgres
  * @extends {UserRepository}
  */
 class UserRepositoryPostgres extends UserRepository {
+  private _pool: any;
+  private _idGenerator: () => string;
   /**
    * Creates an instance of UserRepositoryPostgres.
    * @param {Pool} pool
    * @param {nanoid} idGenerator
    * @memberof UserRepositoryPostgres
    */
-  constructor(pool, idGenerator) {
+  constructor(pool: Pool, idGenerator: () => string) {
     super();
     this._pool = pool;
     this._idGenerator = idGenerator;
@@ -30,7 +27,7 @@ class UserRepositoryPostgres extends UserRepository {
    * @param {string} username
    * @memberof UserRepositoryPostgres
    */
-  async verifyAvailableUsername(username) {
+  async verifyAvailableUsername(username: string) {
     const query = {
       text: 'SELECT username FROM users WHERE username = $1',
       values: [username],
@@ -48,7 +45,7 @@ class UserRepositoryPostgres extends UserRepository {
    * @return {RegisteredUser}
    * @memberof UserRepositoryPostgres
    */
-  async addUser(registerUser) {
+  async addUser(registerUser: RegisterUser): Promise<RegisteredUser> {
     const {username, password, fullname} = registerUser;
     const id = `user-${this._idGenerator()}`;
 
@@ -72,7 +69,7 @@ class UserRepositoryPostgres extends UserRepository {
    * }}
    * @memberof UserRepositoryPostgres
    */
-  async getPasswordByUsername(username) {
+  async getPasswordByUsername(username: string): Promise<string> {
     const query = {
       text: 'SELECT password FROM users WHERE username = $1',
       values: [username],
@@ -92,7 +89,7 @@ class UserRepositoryPostgres extends UserRepository {
    * @return {string}
    * @memberof UserRepositoryPostgres
    */
-  async getIdByUsername(username) {
+  async getIdByUsername(username: string): Promise<string> {
     const query = {
       text: 'SELECT id FROM users WHERE username = $1',
       values: [username],
@@ -110,4 +107,4 @@ class UserRepositoryPostgres extends UserRepository {
   }
 }
 
-module.exports = UserRepositoryPostgres;
+export default UserRepositoryPostgres;

@@ -1,4 +1,4 @@
-const AddThread = require('../AddThread');
+import AddThread from '../AddThread';
 
 describe('AddThread entities', () => {
   it('should throw error when payload not contain needed property', () => {
@@ -8,7 +8,7 @@ describe('AddThread entities', () => {
     };
 
     // Action & Assert
-    expect(() => new AddThread(payload))
+    expect(() => new AddThread(payload as any))
         .toThrowError('ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
@@ -22,7 +22,7 @@ describe('AddThread entities', () => {
     };
 
     // Action & Assert
-    expect(() => new AddThread(payload))
+    expect(() => new AddThread(payload as any))
         .toThrowError('ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 

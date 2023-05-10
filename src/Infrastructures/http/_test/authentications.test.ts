@@ -1,11 +1,9 @@
-const pool = require('../../database/postgres/pool');
-const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
-const AuthenticationsTableTestHelper =
-require('../../../../tests/AuthenticationsTableTestHelper');
-const container = require('../../container');
-const createServer = require('../createServer');
-const AuthenticationTokenManager =
-require('../../../Applications/security/AuthenticationTokenManager');
+import pool from '../../database/postgres/pool';
+import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
+import AuthenticationsTableTestHelper from '../../../../tests/AuthenticationsTableTestHelper';
+import container from '../../container';
+import createServer from '../createServer';
+import AuthenticationTokenManager from '../../../Applications/security/AuthenticationTokenManager';
 
 describe('/authentications endpoint', () => {
   afterAll(async () => {

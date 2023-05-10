@@ -1,7 +1,6 @@
-/**
- * @typedef {import('./../../Domains/replies/entities/AddReply')} AddReply
- * @typedef {import('./../../Domains/replies/entities/DeleteReply')} DeleteReply
- */
+import AddReply from './entities/AddReply';
+import AddedReply from './entities/AddedReply';
+import DeleteReply from './entities/DeleteReply';
 
 /**
  *
@@ -13,7 +12,7 @@ class ReplyRepository {
    * @param {AddReply} addReply
    * @memberof ReplyRepository
    */
-  async addReply(addReply) {
+  async addReply(addReply: AddReply): Promise<AddedReply> {
     throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
@@ -21,7 +20,7 @@ class ReplyRepository {
    * @param {DeleteReply} deleteReply
    * @memberof ReplyRepository
    */
-  async deleteReply(deleteReply) {
+  async deleteReply(deleteReply: DeleteReply): Promise<void> {
     throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
@@ -29,8 +28,8 @@ class ReplyRepository {
    * @param {string} commentId
    * @memberof ReplyRepository
    */
-  async getCommentReplies(commentId) {
+  async getCommentReplies(commentId: string): Promise<any[]> {
     throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 }
-module.exports = ReplyRepository;
+export default ReplyRepository;

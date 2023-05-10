@@ -1,17 +1,13 @@
-const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
-const CommentsTableTestHelper =
-require('../../../../tests/CommentsTableTestHelper');
-const ThreadsTableTestHelper =
-require('../../../../tests/ThreadsTableTestHelper');
-const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
-const pool = require('../../database/postgres/pool');
-const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
-const AddComment = require('../../../Domains/comments/entities/AddComment');
-const AddedComment = require('../../../Domains/comments/entities/AddedComment');
-const DeleteComment =
-require('../../../Domains/comments/entities/DeleteComment');
-const AuthorizationError =
-require('../../../Commons/exceptions/AuthorizationError');
+import NotFoundError from '../../../Commons/exceptions/NotFoundError';
+import CommentsTableTestHelper from '../../../../tests/CommentsTableTestHelper';
+import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper';
+import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
+import pool from '../../database/postgres/pool';
+import CommentRepositoryPostgres from '../CommentRepositoryPostgres';
+import AddComment from '../../../Domains/comments/entities/AddComment';
+import AddedComment from '../../../Domains/comments/entities/AddedComment';
+import DeleteComment from '../../../Domains/comments/entities/DeleteComment';
+import AuthorizationError from '../../../Commons/exceptions/AuthorizationError';
 
 describe('CommentRepositoryPostgres postgres', () => {
   afterEach(async () => {
@@ -43,7 +39,7 @@ describe('CommentRepositoryPostgres postgres', () => {
             content: 'content',
             owner: 'user-123',
             threadId: 'thread-123',
-          });
+          } as any);
           const fakeIdGenerator = () => '123';
           const commentRepositoryPostgres = new CommentRepositoryPostgres(
               pool,
@@ -65,7 +61,7 @@ describe('CommentRepositoryPostgres postgres', () => {
         content: 'content',
         owner: 'user-123',
         threadId: 'thread-123',
-      });
+      } as any);
       const fakeIdGenerator = () => '123'; // stub!
       const commentRepositoryPostgres = new CommentRepositoryPostgres(
           pool,
@@ -98,7 +94,7 @@ describe('CommentRepositoryPostgres postgres', () => {
         commentId: 'comment-123',
         owner: 'user-123',
       });
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {} as any);
 
       // Action
       await commentRepositoryPostgres.deleteComment(deleteComment);
@@ -117,7 +113,7 @@ describe('CommentRepositoryPostgres postgres', () => {
         commentId: 'comment-123',
         owner: 'user-123',
       });
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {} as any as any);
 
       // Action and Assert
       await expect(commentRepositoryPostgres.deleteComment(deleteComment))
@@ -136,7 +132,7 @@ describe('CommentRepositoryPostgres postgres', () => {
         commentId: 'comment-123',
         owner: 'user-321',
       });
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {} as any as any);
 
       // Action and Assert
       await expect(commentRepositoryPostgres.deleteComment(deleteComment))
@@ -152,7 +148,7 @@ describe('CommentRepositoryPostgres postgres', () => {
         threadId: 'thread-123',
         owner: 'user-123',
       });
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {} as any);
 
       // Action and Assert
       await expect(commentRepositoryPostgres.verifyCommentExists('comment-123'))
@@ -161,7 +157,7 @@ describe('CommentRepositoryPostgres postgres', () => {
 
     it('should throw NotFoundError if comment not exists', async () => {
       // Arrange
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {} as any);
 
       // Action and Assert
       await expect(commentRepositoryPostgres.verifyCommentExists('comment-123'))
@@ -176,11 +172,11 @@ describe('CommentRepositoryPostgres postgres', () => {
       await CommentsTableTestHelper.addComment({
         id: 'comment-123',
         content: 'content',
-        date: date,
+        date: date.toISOString(),
         threadId: 'thread-123',
         owner: 'user-123',
       });
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {} as any);
 
       // Action
       const comments = await commentRepositoryPostgres
@@ -188,7 +184,7 @@ describe('CommentRepositoryPostgres postgres', () => {
 
       // Assert
       expect(comments).toHaveLength(1);
-      comments.forEach((comment) => {
+      comments.forEach((comment: any) => {
         expect(comment.id).toEqual('comment-123');
         expect(comment.content).toEqual('content');
         expect(comment.date.toISOString()).toEqual(date.toISOString());

@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-const pool = require('../src/Infrastructures/database/postgres/pool');
+import pool from '../src/Infrastructures/database/postgres/pool';
 
 const RepliesTableTestHelper = {
   async addReply({
@@ -18,7 +18,7 @@ const RepliesTableTestHelper = {
     await pool.query(query);
   },
 
-  async findRepliesById(id) {
+  async findRepliesById(id: string) {
     const query = {
       text: 'SELECT * FROM replies WHERE id = $1',
       values: [id],
@@ -33,4 +33,4 @@ const RepliesTableTestHelper = {
   },
 };
 
-module.exports = RepliesTableTestHelper;
+export default RepliesTableTestHelper;

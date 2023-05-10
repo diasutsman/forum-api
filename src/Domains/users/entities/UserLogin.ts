@@ -1,30 +1,31 @@
+type Payload = {
+  username: string;
+  password: string;
+}
+
 /**
  * @class UserLogin
  */
 class UserLogin {
+  username: any;
+  password: any;
   /**
    * Creates an instance of UserLogin.
-   * @param {{
-   *  username: string,
-   *  password: string,
-   * }} payload
+   * @param {Payload} payload
    * @memberof UserLogin
    */
-  constructor(payload) {
-    this._verifyPayload(payload);
+  constructor(payload: Payload) {
+    UserLogin._verifyPayload(payload);
 
     this.username = payload.username;
     this.password = payload.password;
   }
 
   /**
-   * @param {{
-   *  username: string,
-   *  password: string,
-   * }} payload
+   * @param {Payload} payload
    * @memberof UserLogin
    */
-  _verifyPayload(payload) {
+  private static _verifyPayload(payload: Payload) {
     const {username, password} = payload;
 
     if (!username || !password) {
@@ -37,4 +38,4 @@ class UserLogin {
   }
 }
 
-module.exports = UserLogin;
+export default UserLogin;

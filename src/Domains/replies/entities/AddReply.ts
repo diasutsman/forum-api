@@ -1,19 +1,24 @@
+type Payload = {
+  threadId: string;
+  commentId: string;
+  content: string;
+  owner: string;
+  date?: string;
+}
 /**
- *
- *
  * @class AddReply
  */
 class AddReply {
+  threadId: string;
+  commentId: string;
+  content: string;
+  owner: string;
+  date: {};
   /**
-   * @param {{
-   *  threadId: string,
-   *  commentId: string,
-   *  content: string,
-   *  owner: string,
-   * }} payload
+   * @param {Payload} payload
    */
-  constructor(payload) {
-    this._verifyPayload(payload);
+  constructor(payload: Payload) {
+    AddReply._verifyPayload(payload);
     const {threadId, commentId, content, owner, date} = payload;
 
     this.threadId = threadId;
@@ -24,15 +29,14 @@ class AddReply {
   }
 
   /**
-   * @param {{
-   *  threadId: string,
-   *  commentId: string,
-   *  content: string,
-   *  owner: string,
-   * }} payload
+   * @param {Payload} payload
    * @memberof AddReply
    */
-  _verifyPayload({threadId, commentId, content, owner}) {
+  private static _verifyPayload({threadId,
+    commentId,
+    content,
+    owner,
+  }: Payload) {
     if (!threadId || !commentId || !content || !owner) {
       throw new Error('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
     }
@@ -48,4 +52,4 @@ class AddReply {
   }
 }
 
-module.exports = AddReply;
+export default AddReply;

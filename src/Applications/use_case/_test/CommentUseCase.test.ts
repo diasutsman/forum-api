@@ -1,12 +1,10 @@
-const CommentRepository =
-  require('../../../Domains/comments/CommentRepository');
-const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
-const AddComment = require('../../../Domains/comments/entities/AddComment');
-const AddedComment = require('../../../Domains/comments/entities/AddedComment');
-const DeleteComment =
-  require('../../../Domains/comments/entities/DeleteComment');
-const CommentUseCase = require('../CommentUseCase');
-const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
+import CommentRepository from '../../../Domains/comments/CommentRepository';
+import ThreadRepository from '../../../Domains/threads/ThreadRepository';
+import AddComment from '../../../Domains/comments/entities/AddComment';
+import AddedComment from '../../../Domains/comments/entities/AddedComment';
+import DeleteComment from '../../../Domains/comments/entities/DeleteComment';
+import CommentUseCase from '../CommentUseCase';
+import NotFoundError from '../../../Commons/exceptions/NotFoundError';
 
 describe('CommentUseCase', () => {
   /**
@@ -142,10 +140,9 @@ describe('CommentUseCase', () => {
     async () => {
       // Arrange
       const useCasePayload = {
-        content: 'content',
         threadId: 'thread-404',
+        commentId: 'comment-123',
         owner: 'user-123',
-        date: new Date().toISOString(),
       };
 
       /** creating dependency of use case */
@@ -165,7 +162,7 @@ describe('CommentUseCase', () => {
       });
 
       // Action & Assert
-      await expect(commentUseCase.deleteComment(useCasePayload))
+      await expect(commentUseCase.deleteComment(useCasePayload as any))
           .rejects.toThrowError('thread tidak ditemukan');
       expect(mockThreadRepository.verifyThreadAvailability)
           .toBeCalledWith(useCasePayload.threadId);

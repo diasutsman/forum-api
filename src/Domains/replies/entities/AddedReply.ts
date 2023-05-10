@@ -1,17 +1,22 @@
+type Payload = {
+  id: string;
+  content: string;
+  owner: string;
+}
+
 /**
  * @class AddedReply
  */
 class AddedReply {
+  id: string;
+  content: string;
+  owner: string;
   /**
    * Creates an instance of AddedReply.
-   * @param {{
-   *  id: string,
-   *  content: string,
-   *  owner: string,
-   * }} payload
+   * @param {Payload} payload
    * @memberof AddedReply
    */
-  constructor(payload) {
+  constructor(payload: Payload) {
     this._verifyPayload(payload);
     const {id, content, owner} = payload;
     this.id = id;
@@ -20,14 +25,10 @@ class AddedReply {
   }
 
   /**
-   * @param {{
-   * id: string,
-   * content: string,
-   * owner: string,
-   * }} payload
+   * @param {Payload} payload
    * @memberof AddedReply
    */
-  _verifyPayload({id, content, owner}) {
+  _verifyPayload({id, content, owner}: Payload) {
     if (!id || !content || !owner) {
       throw new Error('ADDED_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
     }
@@ -41,4 +42,4 @@ class AddedReply {
     }
   }
 }
-module.exports = AddedReply;
+export default AddedReply;

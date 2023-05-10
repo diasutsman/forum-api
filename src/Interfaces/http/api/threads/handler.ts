@@ -4,23 +4,23 @@
  * @typedef {import('@hapi/hapi').ResponseToolkit} ResponseToolkit
  * @typedef {import('@hapi/hapi').ResponseObject} ResponseObject
  */
-const AddThreadUseCase =
-require('../../../../Applications/use_case/ThreadUseCase');
-const CommentUseCase =
-require('../../../../Applications/use_case/CommentUseCase');
-const ThreadUseCase =
-require('../../../../Applications/use_case/ThreadUseCase');
-const autoBind = require('auto-bind');
-const ReplyUseCase = require('../../../../Applications/use_case/ReplyUseCase');
+import AddThreadUseCase from '../../../../Applications/use_case/ThreadUseCase';
+import CommentUseCase from '../../../../Applications/use_case/CommentUseCase';
+import ThreadUseCase from '../../../../Applications/use_case/ThreadUseCase';
+import autoBind from 'auto-bind';
+import ReplyUseCase from '../../../../Applications/use_case/ReplyUseCase';
+import { Container } from 'src/Infrastructures/container';
+import { Request, ResponseToolkit, ResponseObject } from '@hapi/hapi';
 
 /**
  * @class ThreadsHandler
  */
 class ThreadsHandler {
+  private _container: any;
   /**
    * @param {Container} container
    */
-  constructor(container) {
+  constructor(container: Container) {
     this._container = container;
     autoBind(this);
   }
@@ -31,10 +31,10 @@ class ThreadsHandler {
    * @return {ResponseObject}
    * @memberof ThreadsHandler
    */
-  async postThreadHandler(request, h) {
+  async postThreadHandler(request: Request, h: ResponseToolkit): Promise<ResponseObject> {
     const addThreadUseCase = this._container.getInstance(AddThreadUseCase.name);
     const addedThread = await addThreadUseCase.addThread({
-      ...request.payload,
+      ...request.payload as object,
       owner: request.auth.credentials.id,
     });
 
@@ -54,11 +54,11 @@ class ThreadsHandler {
    * @return {ResponseObject}
    * @memberof ThreadsHandler
    */
-  async postCommentHandler(request, h) {
+  async postCommentHandler(request: Request, h: ResponseToolkit): Promise<ResponseObject> {
     /** @type {CommentUseCase} */
     const commentUseCase = this._container.getInstance(CommentUseCase.name);
     const addedComment = await commentUseCase.addComment({
-      ...request.payload,
+      ...request.payload as object,
       owner: request.auth.credentials.id,
       threadId: request.params.threadId,
     });
@@ -78,7 +78,7 @@ class ThreadsHandler {
    * @return {ResponseObject}
    * @memberof ThreadsHandler
    */
-  async getThreadByIdHandler(request) {
+  async getThreadByIdHandler(request: Request): Promise<ResponseObject | object> {
     const {threadId: id} = request.params;
     /** @type {ThreadUseCase} */
     const threadUseCase = this._container.getInstance(ThreadUseCase.name);
@@ -97,7 +97,7 @@ class ThreadsHandler {
    * @return {ResponseObject}
    * @memberof ThreadsHandler
    */
-  async deleteThreadCommentByIdHandler(request) {
+  async deleteThreadCommentByIdHandler(request: Request): Promise<ResponseObject | object> {
     const {threadId, commentId} = request.params;
     const {id: credentialId} = request.auth.credentials;
 
@@ -121,14 +121,14 @@ class ThreadsHandler {
    * @return {ResponseObject}
    * @memberof ThreadsHandler
    */
-  async postReplyHandler(request, h) {
+  async postReplyHandler(request: Request, h: ResponseToolkit): Promise<ResponseObject> {
     const {threadId, commentId} = request.params;
     const {id: credentialId} = request.auth.credentials;
 
     /** @type {ReplyUseCase} */
     const replyUseCase = this._container.getInstance(ReplyUseCase.name);
     const addedReply = await replyUseCase.addReply({
-      ...request.payload,
+      ...request.payload as object,
       owner: credentialId,
       threadId,
       commentId,
@@ -149,7 +149,7 @@ class ThreadsHandler {
    * @return {ResponseObject}
    * @memberof ThreadsHandler
    */
-  async deleteReplyHandler(request) {
+  async deleteReplyHandler(request: Request): Promise<ResponseObject | object> {
     const {threadId, commentId, replyId} = request.params;
     const {id: credentialId} = request.auth.credentials;
 
@@ -168,4 +168,4 @@ class ThreadsHandler {
     };
   }
 }
-module.exports = ThreadsHandler;
+export default ThreadsHandler;

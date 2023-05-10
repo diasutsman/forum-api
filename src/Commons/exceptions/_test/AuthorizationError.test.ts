@@ -1,5 +1,5 @@
-const ClientError = require('../ClientError');
-const AuthorizationError = require('../AuthorizationError');
+import ClientError from '../ClientError';
+import AuthorizationError from '../AuthorizationError';
 
 describe('AuthorizationError', () => {
   it('should create AuthorizationError correctly', () => {

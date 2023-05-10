@@ -1,4 +1,4 @@
-const DeleteComment = require('../DeleteComment');
+import DeleteComment from '../DeleteComment';
 
 describe('DeleteComment entities', () => {
   it('should throw error when payload not contain needed property', () => {
@@ -9,7 +9,7 @@ describe('DeleteComment entities', () => {
     };
 
     // Action & Assert
-    expect(() => new DeleteComment(payload))
+    expect(() => new DeleteComment(payload as any))
         .toThrowError('DELETE_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
@@ -22,7 +22,7 @@ describe('DeleteComment entities', () => {
     };
 
     // Action & Assert
-    expect(() => new DeleteComment(payload))
+    expect(() => new DeleteComment(payload as any))
         .toThrowError('DELETE_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 

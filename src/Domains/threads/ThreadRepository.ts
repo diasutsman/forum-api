@@ -1,6 +1,5 @@
-/**
- * @typedef {import('./../../Domains/threads/entities/AddThread')} AddThread
- */
+import AddThread from './entities/AddThread';
+import AddedThread from './entities/AddedThread';
 
 /**
  *
@@ -12,23 +11,23 @@ class ThreadRepository {
    * @param {AddThread} addThread
    * @memberof ThreadRepository
    */
-  async addThread(addThread) {
+  async addThread(addThread: AddThread): Promise<AddedThread> {
     throw new Error('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
   /**
    * @param {string} id
    * @memberof ThreadRepository
    */
-  async getThreadById(id) {
+  async getThreadById(id: string): Promise<any> {
     throw new Error('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
   /**
    * @param {string} id
    * @memberof ThreadRepository
    */
-  async verifyThreadAvailability(id) {
+  async verifyThreadAvailability(id: string) {
     throw new Error('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 }
 
-module.exports = ThreadRepository;
+export default ThreadRepository;

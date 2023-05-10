@@ -1,22 +1,26 @@
 /**
  * @typedef {import('bcrypt')} bcrypt
  */
-const EncryptionHelper = require('../../Applications/security/PasswordHash');
-const AuthenticationError =
-require('../../Commons/exceptions/AuthenticationError');
+import EncryptionHelper from '../../Applications/security/PasswordHash';
+import AuthenticationError from '../../Commons/exceptions/AuthenticationError';
+import bcrypt from 'bcrypt';
+
+type Bcrypt = typeof bcrypt;
 
 /**
  * @class BcryptPasswordHash
  * @extends {EncryptionHelper}
  */
 class BcryptPasswordHash extends EncryptionHelper {
+  private _bcrypt: Bcrypt;
+  private _saltRound: number;
   /**
    * Creates an instance of BcryptPasswordHash.
-   * @param {bcrypt} bcrypt
+   * @param {Bcrypt} bcrypt
    * @param {number} [saltRound=10]
    * @memberof BcryptPasswordHash
    */
-  constructor(bcrypt, saltRound = 10) {
+  constructor(bcrypt: Bcrypt, saltRound = 10) {
     super();
     this._bcrypt = bcrypt;
     this._saltRound = saltRound;
@@ -27,7 +31,7 @@ class BcryptPasswordHash extends EncryptionHelper {
    * @return {string}
    * @memberof BcryptPasswordHash
    */
-  async hash(password) {
+  async hash(password: string) {
     return this._bcrypt.hash(password, this._saltRound);
   }
 
@@ -36,7 +40,7 @@ class BcryptPasswordHash extends EncryptionHelper {
    * @param {string} hashedPassword
    * @memberof BcryptPasswordHash
    */
-  async comparePassword(password, hashedPassword) {
+  async comparePassword(password: string, hashedPassword: string) {
     const result = await this._bcrypt.compare(password, hashedPassword);
 
     if (!result) {
@@ -45,4 +49,4 @@ class BcryptPasswordHash extends EncryptionHelper {
   }
 }
 
-module.exports = BcryptPasswordHash;
+export default BcryptPasswordHash;

@@ -1,8 +1,8 @@
-const AuthenticationRepository =
-  require('../../../Domains/authentications/AuthenticationRepository');
-const AuthenticationTokenManager =
-  require('../../security/AuthenticationTokenManager');
-const RefreshAuthenticationUseCase = require('../RefreshAuthenticationUseCase');
+import AuthenticationRepository
+  from '../../../Domains/authentications/AuthenticationRepository';
+import AuthenticationTokenManager
+  from '../../security/AuthenticationTokenManager';
+import RefreshAuthenticationUseCase from '../RefreshAuthenticationUseCase';
 
 describe('RefreshAuthenticationUseCase', () => {
   it('should throw error if use case payload not contain refresh token',
@@ -10,12 +10,14 @@ describe('RefreshAuthenticationUseCase', () => {
       // Arrange
         const useCasePayload = {};
         const refreshAuthenticationUseCase =
-        new RefreshAuthenticationUseCase({});
+        new RefreshAuthenticationUseCase({} as any);
         const errorMsg =
         'REFRESH_AUTHENTICATION_USE_CASE.NOT_CONTAIN_REFRESH_TOKEN';
 
         // Action & Assert
-        await expect(refreshAuthenticationUseCase.execute(useCasePayload))
+        await expect(refreshAuthenticationUseCase
+            .execute(useCasePayload as any),
+        )
             .rejects
             .toThrowError(errorMsg);
       });
@@ -25,12 +27,13 @@ describe('RefreshAuthenticationUseCase', () => {
     const useCasePayload = {
       refreshToken: 1,
     };
-    const refreshAuthenticationUseCase = new RefreshAuthenticationUseCase({});
+    const refreshAuthenticationUseCase =
+        new RefreshAuthenticationUseCase({} as any);
     const msg = 'REFRESH_AUTHENTICATION_USE_CASE.' +
       'PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION';
 
     // Action & Assert
-    await expect(refreshAuthenticationUseCase.execute(useCasePayload))
+    await expect(refreshAuthenticationUseCase.execute(useCasePayload as any))
         .rejects
         .toThrowError(msg);
   });

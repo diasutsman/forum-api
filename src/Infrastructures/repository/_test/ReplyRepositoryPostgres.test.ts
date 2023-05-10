@@ -1,18 +1,14 @@
-const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
-const CommentsTableTestHelper =
-require('../../../../tests/CommentsTableTestHelper');
-const ThreadsTableTestHelper =
-require('../../../../tests/ThreadsTableTestHelper');
-const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
-const RepliesTableTestHelper =
-require('../../../../tests/RepliesTableTestHelper');
-const pool = require('../../database/postgres/pool');
-const ReplyRepositoryPostgres = require('../ReplyRepositoryPostgres');
-const AddReply = require('../../../Domains/replies/entities/AddReply');
-const AddedReply = require('../../../Domains/replies/entities/AddedReply');
-const DeleteReply = require('../../../Domains/replies/entities/DeleteReply');
-const AuthorizationError =
-require('../../../Commons/exceptions/AuthorizationError');
+import NotFoundError from '../../../Commons/exceptions/NotFoundError';
+import CommentsTableTestHelper from '../../../../tests/CommentsTableTestHelper';
+import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper';
+import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
+import RepliesTableTestHelper from '../../../../tests/RepliesTableTestHelper';
+import pool from '../../database/postgres/pool';
+import ReplyRepositoryPostgres from '../ReplyRepositoryPostgres';
+import AddReply from '../../../Domains/replies/entities/AddReply';
+import AddedReply from '../../../Domains/replies/entities/AddedReply';
+import DeleteReply from '../../../Domains/replies/entities/DeleteReply';
+import AuthorizationError from '../../../Commons/exceptions/AuthorizationError';
 
 describe('ReplyRepositoryPostgres postgres', () => {
   afterEach(async () => {
@@ -103,7 +99,7 @@ describe('ReplyRepositoryPostgres postgres', () => {
         replyId: 'reply-123',
         owner: 'user-123',
       });
-      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {} as any);
 
       // Action
       await replyRepositoryPostgres.deleteReply(deleteReply);
@@ -123,7 +119,7 @@ describe('ReplyRepositoryPostgres postgres', () => {
         replyId: 'reply-123',
         owner: 'user-123',
       });
-      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {} as any);
 
       // Action and Assert
       await expect(replyRepositoryPostgres.deleteReply(deleteComment))
@@ -143,7 +139,7 @@ describe('ReplyRepositoryPostgres postgres', () => {
             replyId: 'reply-123',
             owner: 'user-456',
           });
-          const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+          const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {} as any);
 
           // Action and Assert
           await expect(replyRepositoryPostgres.deleteReply(deleteComment))
@@ -161,12 +157,12 @@ describe('ReplyRepositoryPostgres postgres', () => {
         id: 'reply-123',
         content: 'reply',
         owner: 'user-123',
-        date: date,
+        date: date.toISOString(),
         commentId: 'comment-123',
         threadId: 'thread-123',
       });
 
-      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {} as any);
 
       // Action
       const replies = await replyRepositoryPostgres.getCommentReplies(
@@ -176,7 +172,7 @@ describe('ReplyRepositoryPostgres postgres', () => {
       // Assert
 
       expect(replies).toHaveLength(1);
-      replies.forEach((reply) => {
+      replies.forEach((reply: any) => {
         expect(reply.id).toEqual('reply-123');
         expect(reply.content).toEqual('reply');
         expect(reply.owner).toBe('user-123');

@@ -1,4 +1,4 @@
-const ClientError = require('./ClientError');
+import ClientError from './ClientError';
 
 /**
  * @class AuthorizationError
@@ -10,10 +10,10 @@ class AuthorizationError extends ClientError {
    * @param {string} message
    * @memberof AuthorizationError
    */
-  constructor(message) {
+  constructor(message: string) {
     super(message, 403);
     this.name = 'AuthorizationError';
   }
 }
 
-module.exports = AuthorizationError;
+export default AuthorizationError;

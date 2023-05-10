@@ -1,32 +1,33 @@
+type Payload = {
+  threadId: string;
+  commentId: string;
+  owner: string;
+}
+
 /**
  * @class DeleteComment
  */
 class DeleteComment {
+  threadId: string;
+  commentId: string;
+  owner: string;
   /**
    * Creates an instance of DeleteComment.
-   * @param {{
-   *  threadId: string,
-   *  commentId: string,
-   *  owner: string,
-   * }} payload
+   * @param {Payload} payload
    * @memberof DeleteComment
    */
-  constructor(payload) {
-    this._verifyPayload(payload);
+  constructor(payload: Payload) {
+    DeleteComment._verifyPayload(payload);
     this.threadId = payload.threadId;
     this.commentId = payload.commentId;
     this.owner = payload.owner;
   }
 
   /**
-   * @param {{
-   *  threadId: string,
-   *  commentId: string,
-   *  owner: string,
-   * }} payload
+   * @param {Payload} payload
    * @memberof DeleteComment
    */
-  _verifyPayload(payload) {
+  private static _verifyPayload(payload: Payload) {
     const {threadId, commentId, owner} = payload;
     if (!threadId || !commentId || !owner) {
       throw new Error('DELETE_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
@@ -41,4 +42,4 @@ class DeleteComment {
   }
 }
 
-module.exports = DeleteComment;
+export default DeleteComment;

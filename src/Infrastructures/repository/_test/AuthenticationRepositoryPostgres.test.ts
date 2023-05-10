@@ -1,9 +1,7 @@
-const InvariantError = require('../../../Commons/exceptions/InvariantError');
-const AuthenticationsTableTestHelper =
-require('../../../../tests/AuthenticationsTableTestHelper');
-const pool = require('../../database/postgres/pool');
-const AuthenticationRepositoryPostgres =
-require('../AuthenticationRepositoryPostgres');
+import InvariantError from '../../../Commons/exceptions/InvariantError';
+import AuthenticationsTableTestHelper from '../../../../tests/AuthenticationsTableTestHelper';
+import pool from '../../database/postgres/pool';
+import AuthenticationRepositoryPostgres from '../AuthenticationRepositoryPostgres';
 
 describe('AuthenticationRepository postgres', () => {
   afterEach(async () => {

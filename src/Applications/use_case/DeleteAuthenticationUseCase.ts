@@ -1,24 +1,27 @@
-/**
- * @typedef {import('../../Domains/authentications/AuthenticationRepository')
- * } AuthenticationRepository
- */
+import {RefreshPayload} from 'src/Commons/types';
+import AuthenticationRepository
+  from 'src/Domains/authentications/AuthenticationRepository';
+
+type Dependencies = {
+    authenticationRepository: AuthenticationRepository;
+};
+
 /**
  * DeleteAuthenticationUseCase
  */
 class DeleteAuthenticationUseCase {
+  private _authenticationRepository: AuthenticationRepository;
   /**
    * @param {AuthenticationRepository} params
    */
-  constructor({authenticationRepository}) {
+  constructor({authenticationRepository}: Dependencies) {
     this._authenticationRepository = authenticationRepository;
   }
 
   /**
-   * @param {{
-   *  refreshToken: string
-   * }} useCasePayload
+   * @param {RefreshPayload} useCasePayload
    */
-  async execute(useCasePayload) {
+  async execute(useCasePayload: RefreshPayload) {
     this._validatePayload(useCasePayload);
     const {refreshToken} = useCasePayload;
     await this._authenticationRepository.checkAvailabilityToken(refreshToken);
@@ -26,11 +29,9 @@ class DeleteAuthenticationUseCase {
   }
 
   /**
-   * @param {{
-   *  refreshToken: string
-   * }} payload
+   * @param {RefreshPayload} payload
    */
-  _validatePayload(payload) {
+  _validatePayload(payload: RefreshPayload) {
     const {refreshToken} = payload;
     if (!refreshToken) {
       throw new Error(
@@ -47,4 +48,4 @@ class DeleteAuthenticationUseCase {
   }
 }
 
-module.exports = DeleteAuthenticationUseCase;
+export default DeleteAuthenticationUseCase;

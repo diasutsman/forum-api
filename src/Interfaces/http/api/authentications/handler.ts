@@ -4,24 +4,24 @@
  * @typedef {import('@hapi/hapi').ResponseToolkit} ResponseToolkit
  * @typedef {import('@hapi/hapi').ResponseObject} ResponseObject
  */
-const LoginUserUseCase =
-  require('../../../../Applications/use_case/LoginUserUseCase');
-const RefreshAuthenticationUseCase =
-  require('../../../../Applications/use_case/RefreshAuthenticationUseCase');
-const LogoutUserUseCase =
-  require('../../../../Applications/use_case/LogoutUserUseCase');
-const autoBind = require('auto-bind');
+import LoginUserUseCase from '../../../../Applications/use_case/LoginUserUseCase';
+import RefreshAuthenticationUseCase from '../../../../Applications/use_case/RefreshAuthenticationUseCase';
+import LogoutUserUseCase from '../../../../Applications/use_case/LogoutUserUseCase';
+import autoBind from 'auto-bind';
+import { Container } from 'src/Infrastructures/container';
+import { Request, ResponseToolkit, ResponseObject } from '@hapi/hapi';
 
 /**
  * @class AuthenticationsHandler
  */
 class AuthenticationsHandler {
+  private _container: Container;
   /**
    * Creates an instance of AuthenticationsHandler.
    * @param {Container} container
    * @memberof AuthenticationsHandler
    */
-  constructor(container) {
+  constructor(container: Container) {
     this._container = container;
 
     autoBind(this);
@@ -33,7 +33,7 @@ class AuthenticationsHandler {
    * @return {ResponseObject}
    * @memberof AuthenticationsHandler
    */
-  async postAuthenticationHandler(request, h) {
+  async postAuthenticationHandler(request: Request, h: ResponseToolkit): Promise<ResponseObject> {
     const loginUserUseCase = this._container.getInstance(LoginUserUseCase.name);
     const {
       accessToken,
@@ -55,7 +55,7 @@ class AuthenticationsHandler {
    * @return {ResponseObject}
    * @memberof AuthenticationsHandler
    */
-  async putAuthenticationHandler(request) {
+  async putAuthenticationHandler(request: Request): Promise<ResponseObject | {}> {
     const refreshAuthenticationUseCase = this._container
         .getInstance(RefreshAuthenticationUseCase.name);
     const accessToken =
@@ -74,7 +74,7 @@ class AuthenticationsHandler {
    * @return {ResponseObject}
    * @memberof AuthenticationsHandler
    */
-  async deleteAuthenticationHandler(request) {
+  async deleteAuthenticationHandler(request: Request): Promise<ResponseObject | {}> {
     const logoutUserUseCase = this._container
         .getInstance(LogoutUserUseCase.name);
     await logoutUserUseCase.execute(request.payload);
@@ -84,4 +84,4 @@ class AuthenticationsHandler {
   }
 }
 
-module.exports = AuthenticationsHandler;
+export default AuthenticationsHandler;

@@ -1,15 +1,11 @@
-const pool = require('../../database/postgres/pool');
-const container = require('../../container');
-const createServer = require('../createServer');
-const ThreadsTableTestHelper =
-require('../../../../tests/ThreadsTableTestHelper');
-const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
-const CommentsTableTestHelper =
-require('../../../../tests/CommentsTableTestHelper');
-const RepliesTableTestHelper =
-require('../../../../tests/RepliesTableTestHelper');
-const AuthenticationTokenManager =
-require('../../../Applications/security/AuthenticationTokenManager');
+import pool from '../../database/postgres/pool';
+import container from '../../container';
+import createServer from '../createServer';
+import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper';
+import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
+import CommentsTableTestHelper from '../../../../tests/CommentsTableTestHelper';
+import RepliesTableTestHelper from '../../../../tests/RepliesTableTestHelper';
+import AuthenticationTokenManager from '../../../Applications/security/AuthenticationTokenManager';
 
 describe('/threads/{threadsId}/comments/{commentsId}/replies endpoint', () => {
   afterAll(async () => {

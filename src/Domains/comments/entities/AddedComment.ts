@@ -1,19 +1,24 @@
+type Payload = {
+  id: string;
+  content: string;
+  owner: string;
+}
+
 /**
  *
  *
  * @class AddedComment
  */
 class AddedComment {
+  id: string;
+  content: string;
+  owner: string;
   /**
    * Creates an instance of AddedComment.
-   * @param {{
-   *  id: string,
-   *  content: string,
-   *  owner: string,
-   * }} payload
+   * @param {Payload} payload
    * @memberof AddedComment
    */
-  constructor(payload) {
+  constructor(payload: Payload) {
     this._verifyPayload(payload);
     this.id = payload.id;
     this.content = payload.content;
@@ -21,14 +26,10 @@ class AddedComment {
   }
 
   /**
-   * @param {{
-   *  id: string,
-   *  content: string,
-   *  owner: string,
-   * }} payload
+   * @param {Payload} payload
    * @memberof AddedComment
    */
-  _verifyPayload(payload) {
+  _verifyPayload(payload: Payload) {
     const {id, content, owner} = payload;
     if (!id || !content || !owner) {
       throw new Error('ADDED_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
@@ -43,4 +44,4 @@ class AddedComment {
   }
 }
 
-module.exports = AddedComment;
+export default AddedComment;

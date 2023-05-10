@@ -1,22 +1,18 @@
-/**
- * @typedef {import('../../../../Infrastructures/container')} Container
- * @typedef {import('@hapi/hapi').Request} Request
- * @typedef {import('@hapi/hapi').ResponseToolkit} ResponseToolkit
- * @typedef {import('@hapi/hapi').ResponseObject} ResponseObject
- */
-const AddUserUseCase =
-require('../../../../Applications/use_case/AddUserUseCase');
+import { Container } from 'src/Infrastructures/container';
+import AddUserUseCase from '../../../../Applications/use_case/AddUserUseCase';
+import { Request, ResponseObject, ResponseToolkit } from '@hapi/hapi';
 
 /**
  * @class UsersHandler
  */
 class UsersHandler {
+  private _container: any;
   /**
    * Creates an instance of UsersHandler.
    * @param {Container} container
    * @memberof UsersHandler
    */
-  constructor(container) {
+  constructor(container: Container) {
     this._container = container;
 
     this.postUserHandler = this.postUserHandler.bind(this);
@@ -28,7 +24,7 @@ class UsersHandler {
    * @return {ResponseObject}
    * @memberof UsersHandler
    */
-  async postUserHandler(request, h) {
+  async postUserHandler(request: Request, h: ResponseToolkit): Promise<ResponseObject> {
     const addUserUseCase = this._container.getInstance(AddUserUseCase.name);
     const addedUser = await addUserUseCase.execute(request.payload);
 
@@ -43,4 +39,4 @@ class UsersHandler {
   }
 }
 
-module.exports = UsersHandler;
+export default UsersHandler;

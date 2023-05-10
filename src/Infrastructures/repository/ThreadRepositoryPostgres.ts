@@ -1,12 +1,8 @@
-/**
- * @typedef {import('../../Infrastructures/database/postgres/pool')} Pool
- * @typedef {import('nanoid')} nanoid
- * @typedef {import('../../Domains/threads/entities/AddThread')} AddThread
- * @typedef {import('../../Domains/threads/entities/AddedThread')} AddedThread
- */
-const ThreadRepository = require('../../Domains/threads/ThreadRepository');
-const AddedThread = require('../../Domains/threads/entities/AddedThread');
-const NotFoundError = require('../../Commons/exceptions/NotFoundError');
+import ThreadRepository from '../../Domains/threads/ThreadRepository';
+import AddedThread from '../../Domains/threads/entities/AddedThread';
+import NotFoundError from '../../Commons/exceptions/NotFoundError';
+import { Pool } from 'pg';
+import AddThread from 'src/Domains/threads/entities/AddThread';
 /**
  * @class ThreadRepositoryPostgres
  * @extends {ThreadRepository}
@@ -16,11 +12,13 @@ const NotFoundError = require('../../Commons/exceptions/NotFoundError');
  * @extends {ThreadRepository}
  */
 class ThreadRepositoryPostgres extends ThreadRepository {
+  private _pool: any;
+  private _idGenerator: () => string;
   /**
    * @param {Pool} pool
    * @param {nanoid} idGenerator
    */
-  constructor(pool, idGenerator) {
+  constructor(pool: Pool, idGenerator: () => string) {
     super();
     this._pool = pool;
     this._idGenerator = idGenerator;
@@ -31,7 +29,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
    * @return {AddedThread}
    * @memberof ThreadRepositoryPostgres
    */
-  async addThread(addThread) {
+  async addThread(addThread: AddThread) {
     const id = `thread-${this._idGenerator()}`;
     const {title, body, owner, date} = addThread;
     const query = {
@@ -57,7 +55,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
    * }}
    * @memberof ThreadRepositoryPostgres
    */
-  async getThreadById(id) {
+  async getThreadById(id: string) {
     const query = {
       text: `SELECT threads.*, users.username
       FROM threads 
@@ -78,9 +76,9 @@ class ThreadRepositoryPostgres extends ThreadRepository {
   /**
    * @param {string} id
    */
-  async verifyThreadAvailability(id) {
+  async verifyThreadAvailability(id: string) {
     await this.getThreadById(id);
   }
 }
 
-module.exports = ThreadRepositoryPostgres;
+export default ThreadRepositoryPostgres;

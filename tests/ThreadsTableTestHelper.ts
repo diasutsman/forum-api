@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-const pool = require('../src/Infrastructures/database/postgres/pool');
+import pool from '../src/Infrastructures/database/postgres/pool';
 
 const ThreadsTableTestHelper = {
   async addThread({
@@ -17,7 +17,7 @@ const ThreadsTableTestHelper = {
     await pool.query(query);
   },
 
-  async findThreadsById(id) {
+  async findThreadsById(id: string) {
     const query = {
       text: 'SELECT * FROM threads WHERE id = $1',
       values: [id],
@@ -32,4 +32,4 @@ const ThreadsTableTestHelper = {
   },
 };
 
-module.exports = ThreadsTableTestHelper;
+export default ThreadsTableTestHelper;

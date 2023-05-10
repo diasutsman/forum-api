@@ -1,7 +1,7 @@
-const pool = require('../../database/postgres/pool');
-const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
-const container = require('../../container');
-const createServer = require('../createServer');
+import pool from '../../database/postgres/pool';
+import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
+import container from '../../container';
+import createServer from '../createServer';
 
 describe('/users endpoint', () => {
   afterAll(async () => {

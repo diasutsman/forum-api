@@ -1,6 +1,6 @@
-/**
- * @typedef {import('../../Domains/users/entities/RegisterUser')} RegisterUser
- */
+import RegisterUser from './entities/RegisterUser';
+import RegisteredUser from './entities/RegisteredUser';
+
 /**
  * @class UserRepository
  */
@@ -9,7 +9,7 @@ class UserRepository {
    * @param {RegisterUser} registerUser
    * @memberof UserRepository
    */
-  async addUser(registerUser) {
+  async addUser(registerUser: RegisterUser): Promise<RegisteredUser> {
     throw new Error('USER_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
@@ -17,7 +17,7 @@ class UserRepository {
    * @param {string} username
    * @memberof UserRepository
    */
-  async verifyAvailableUsername(username) {
+  async verifyAvailableUsername(username: string) {
     throw new Error('USER_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
@@ -25,7 +25,7 @@ class UserRepository {
    * @param {string} username
    * @memberof UserRepository
    */
-  async getPasswordByUsername(username) {
+  async getPasswordByUsername(username: string): Promise<string> {
     throw new Error('USER_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
@@ -33,9 +33,9 @@ class UserRepository {
    * @param {string} username
    * @memberof UserRepository
    */
-  async getIdByUsername(username) {
+  async getIdByUsername(username: string): Promise<string> {
     throw new Error('USER_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 }
 
-module.exports = UserRepository;
+export default UserRepository;

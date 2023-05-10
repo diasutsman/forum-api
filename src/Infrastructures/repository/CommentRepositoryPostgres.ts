@@ -1,28 +1,23 @@
-/**
- * @typedef {import('../database/postgres/pool')} Pool
- * @typedef {import('nanoid')} nanoid
- * @typedef {import('../../Domains/comments/entities/AddComment')} AddComment
- * @typedef {import('../../Domains/comments/entities/AddedComment')
- * } AddedComment
- * @typedef {import('../../Domains/comments/entities/DeleteComment')
- * } DeleteComment
- */
-const AuthorizationError =
-    require('../../Commons/exceptions/AuthorizationError');
-const NotFoundError = require('../../Commons/exceptions/NotFoundError');
-const CommentRepository = require('../../Domains/comments/CommentRepository');
-const AddedComment = require('../../Domains/comments/entities/AddedComment');
+import AddComment from 'src/Domains/comments/entities/AddComment';
+import AuthorizationError from '../../Commons/exceptions/AuthorizationError';
+import NotFoundError from '../../Commons/exceptions/NotFoundError';
+import CommentRepository from '../../Domains/comments/CommentRepository';
+import AddedComment from '../../Domains/comments/entities/AddedComment';
+import { Pool } from 'pg'; 
+import DeleteComment from 'src/Domains/comments/entities/DeleteComment';
 
 /**
  * @class CommentRepositoryPostgres
  * @extends {CommentRepository}
  */
 class CommentRepositoryPostgres extends CommentRepository {
+  private _pool: any;
+  private _idGenerator: () => string;
   /**
    * @param {Pool} pool
    * @param {nanoid} idGenerator
    */
-  constructor(pool, idGenerator) {
+  constructor(pool: Pool, idGenerator: () => string) {
     super();
     this._pool = pool;
     this._idGenerator = idGenerator;
@@ -33,7 +28,7 @@ class CommentRepositoryPostgres extends CommentRepository {
    * @return {AddedComment}
    * @memberof CommentRepositoryPostgres
    */
-  async addComment(addComment) {
+  async addComment(addComment: AddComment) {
     const {content, owner, threadId} = addComment;
 
     const id = `comment-${this._idGenerator()}`;
@@ -56,7 +51,7 @@ class CommentRepositoryPostgres extends CommentRepository {
    * @param {string} owner
    * @memberof CommentRepositoryPostgres
    */
-  async _verifyComment(commentId, owner) {
+  async _verifyComment(commentId: string, owner: string) {
     const query = {
       text: 'SELECT * FROM comments WHERE id = $1',
       values: [commentId],
@@ -77,7 +72,7 @@ class CommentRepositoryPostgres extends CommentRepository {
    * @param {string} commentId
    * @memberof CommentRepositoryPostgres
    */
-  async verifyCommentExists(commentId) {
+  async verifyCommentExists(commentId: string) {
     const query = {
       text: 'SELECT * FROM comments WHERE id = $1',
       values: [commentId],
@@ -94,7 +89,7 @@ class CommentRepositoryPostgres extends CommentRepository {
    * @param {DeleteComment} deleteComment
    * @memberof CommentRepositoryPostgres
    */
-  async deleteComment(deleteComment) {
+  async deleteComment(deleteComment: DeleteComment) {
     const {commentId, owner} = deleteComment;
 
     await this._verifyComment(commentId, owner);
@@ -117,7 +112,7 @@ class CommentRepositoryPostgres extends CommentRepository {
    * }>}
    * @memberof CommentRepositoryPostgres
    */
-  async getThreadComments(threadId) {
+  async getThreadComments(threadId: string) {
     const query = {
       text: `SELECT comments.*, users.username
       FROM comments
@@ -132,4 +127,4 @@ class CommentRepositoryPostgres extends CommentRepository {
   }
 }
 
-module.exports = CommentRepositoryPostgres;
+export default CommentRepositoryPostgres;

@@ -1,9 +1,9 @@
-const createServer = require('../createServer');
+import createServer from '../createServer';
 
 describe('HTTP server', () => {
   it('should response 404 when request unregistered route', async () => {
     // Arrange
-    const server = await createServer({});
+    const server = await createServer({} as any);
 
     // Action
     const response = await server.inject({
@@ -22,7 +22,7 @@ describe('HTTP server', () => {
       fullname: 'Dicoding Indonesia',
       password: 'super_secret',
     };
-    const server = await createServer({}); // fake injection
+    const server = await createServer({} as any); // fake injection
 
     // Action
     const response = await server.inject({

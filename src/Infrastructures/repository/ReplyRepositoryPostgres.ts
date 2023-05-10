@@ -1,26 +1,23 @@
-/**
- * @typedef {import('../../Infrastructures/database/postgres/pool')} Pool
- * @typedef {import('nanoid')} nanoid
- * @typedef {import('../../Domains/replies/entities/AddReply')} AddReply
- * @typedef {import('../../Domains/replies/entities/AddedReply')} AddedReply
- * @typedef {import('../../Domains/replies/entities/DeleteReply')} DeleteReply
- */
-const AuthorizationError =
-require('../../Commons/exceptions/AuthorizationError');
-const NotFoundError = require('../../Commons/exceptions/NotFoundError');
-const AddedReply = require('../../Domains/replies/entities/AddedReply');
-const ReplyRepository = require('../../Domains/replies/ReplyRepository');
+import AddReply from 'src/Domains/replies/entities/AddReply';
+import AuthorizationError from '../../Commons/exceptions/AuthorizationError';
+import NotFoundError from '../../Commons/exceptions/NotFoundError';
+import AddedReply from '../../Domains/replies/entities/AddedReply';
+import ReplyRepository from '../../Domains/replies/ReplyRepository';
+import { Pool } from 'pg'; 
+import DeleteReply from 'src/Domains/replies/entities/DeleteReply';
 
 /**
  * @class ReplyRepositoryPostgres
  * @extends {ReplyRepository}
  */
 class ReplyRepositoryPostgres extends ReplyRepository {
+  private _pool: any;
+  private _idGenerator: () => string;
   /**
    * @param {Pool} pool
    * @param {nanoid} idGenerator
    */
-  constructor(pool, idGenerator) {
+  constructor(pool: Pool, idGenerator: () => string) {
     super();
     this._pool = pool;
     this._idGenerator = idGenerator;
@@ -31,7 +28,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
    * @return {AddedReply}
    * @memberof ReplyRepositoryPostgres
    */
-  async addReply(addReply) {
+  async addReply(addReply: AddReply): Promise<AddedReply> {
     const id = `reply-${this._idGenerator()}`;
     const {content, owner, threadId, commentId} = addReply;
     const query = {
@@ -51,7 +48,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
    * @param {DeleteReply} deleteReply
    * @memberof ReplyRepositoryPostgres
    */
-  async deleteReply(deleteReply) {
+  async deleteReply(deleteReply: DeleteReply) {
     const {replyId, owner} = deleteReply;
     await this._verifyReply(replyId, owner);
     const query = {
@@ -67,7 +64,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
    * @param {string} owner
    * @memberof ReplyRepositoryPostgres
    */
-  async _verifyReply(replyId, owner) {
+  async _verifyReply(replyId: string, owner: string) {
     const query = {
       text: 'SELECT * FROM replies WHERE id = $1',
       values: [replyId],
@@ -94,7 +91,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
    * }>}
    * @memberof ReplyRepositoryPostgres
    */
-  async getCommentReplies(commentId) {
+  async getCommentReplies(commentId: string) {
     const query = {
       text: `SELECT replies.*, users.username
       FROM replies
@@ -109,4 +106,4 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     return rows;
   }
 }
-module.exports = ReplyRepositoryPostgres;
+export default ReplyRepositoryPostgres;

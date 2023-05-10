@@ -1,4 +1,7 @@
-const routes = (handler) => ([
+import { ServerRoute, ReqRefDefaults } from '@hapi/hapi';
+import Handler from './handler'
+
+const routes = (handler: Handler): ServerRoute<ReqRefDefaults> | ServerRoute<ReqRefDefaults>[] => ([
   {
     method: 'POST',
     path: '/authentications',
@@ -16,4 +19,4 @@ const routes = (handler) => ([
   },
 ]);
 
-module.exports = routes;
+export default routes;

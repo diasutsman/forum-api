@@ -1,4 +1,4 @@
-const AddedComment = require('../AddedComment');
+import AddedComment from '../AddedComment';
 
 describe('AddedComment entities', () => {
   it('should throw error when payload not contain needed property', () => {
@@ -9,7 +9,7 @@ describe('AddedComment entities', () => {
     };
 
     // Action & Assert
-    expect(() => new AddedComment(payload))
+    expect(() => new AddedComment(payload as any))
         .toThrowError('ADDED_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
@@ -22,7 +22,7 @@ describe('AddedComment entities', () => {
     };
 
     // Action & Assert
-    expect(() => new AddedComment(payload))
+    expect(() => new AddedComment(payload as any))
         .toThrowError('ADDED_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 

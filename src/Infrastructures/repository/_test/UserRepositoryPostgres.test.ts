@@ -1,10 +1,9 @@
-const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
-const InvariantError = require('../../../Commons/exceptions/InvariantError');
-const RegisterUser = require('../../../Domains/users/entities/RegisterUser');
-const RegisteredUser =
-require('../../../Domains/users/entities/RegisteredUser');
-const pool = require('../../database/postgres/pool');
-const UserRepositoryPostgres = require('../UserRepositoryPostgres');
+import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
+import InvariantError from '../../../Commons/exceptions/InvariantError';
+import RegisterUser from '../../../Domains/users/entities/RegisterUser';
+import RegisteredUser from '../../../Domains/users/entities/RegisteredUser';
+import pool from '../../database/postgres/pool';
+import UserRepositoryPostgres from '../UserRepositoryPostgres';
 
 describe('UserRepositoryPostgres', () => {
   afterEach(async () => {
@@ -20,7 +19,7 @@ describe('UserRepositoryPostgres', () => {
       // Arrange
       // memasukan user baru dengan username dicoding
       await UsersTableTestHelper.addUser({username: 'dicoding'});
-      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {} as any);
 
       // Action & Assert
       await expect(userRepositoryPostgres.verifyAvailableUsername('dicoding'))
@@ -29,7 +28,7 @@ describe('UserRepositoryPostgres', () => {
 
     it('should not throw InvariantError when username available', async () => {
       // Arrange
-      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {} as any);
 
       // Action & Assert
       await expect(userRepositoryPostgres.verifyAvailableUsername('dicoding'))
@@ -86,7 +85,7 @@ describe('UserRepositoryPostgres', () => {
   describe('getPasswordByUsername', () => {
     it('should throw InvariantError when user not found', () => {
       // Arrange
-      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {} as any);
 
       // Action & Assert
       return expect(userRepositoryPostgres.getPasswordByUsername('dicoding'))
@@ -96,7 +95,7 @@ describe('UserRepositoryPostgres', () => {
 
     it('should return username password when user is found', async () => {
       // Arrange
-      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {} as any);
       await UsersTableTestHelper.addUser({
         username: 'dicoding',
         password: 'secret_password',
@@ -113,7 +112,7 @@ describe('UserRepositoryPostgres', () => {
   describe('getIdByUsername', () => {
     it('should throw InvariantError when user not found', async () => {
       // Arrange
-      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {} as any);
 
       // Action & Assert
       await expect(userRepositoryPostgres.getIdByUsername('dicoding'))
@@ -126,7 +125,7 @@ describe('UserRepositoryPostgres', () => {
       await UsersTableTestHelper.addUser({
         id: 'user-321', username: 'dicoding',
       });
-      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {} as any);
 
       // Action
       const userId = await userRepositoryPostgres.getIdByUsername('dicoding');

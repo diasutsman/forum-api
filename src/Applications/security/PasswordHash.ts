@@ -5,7 +5,7 @@ class PasswordHash {
   /**
    * @param {string} password
    */
-  async hash(password:string) {
+  async hash(password:string): Promise<string> {
     throw new Error('PASSWORD_HASH.METHOD_NOT_IMPLEMENTED');
   }
 
@@ -13,7 +13,7 @@ class PasswordHash {
    * @param {string} plain
    * @param {string} encrypted
    */
-  async comparePassword(plain:string, encrypted:string) {
+  async comparePassword(plain:string, encrypted:string): Promise<void> {
     throw new Error('PASSWORD_HASH.METHOD_NOT_IMPLEMENTED');
   }
 }

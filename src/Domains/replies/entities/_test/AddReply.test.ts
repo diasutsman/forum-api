@@ -1,4 +1,4 @@
-const AddReply = require('../AddReply');
+import AddReply from '../AddReply';
 
 describe('AddReply entities', () => {
   it('should throw error when payload not contain needed property', () => {
@@ -10,7 +10,7 @@ describe('AddReply entities', () => {
     };
 
     // Action & Assert
-    expect(() => new AddReply(payload))
+    expect(() => new AddReply(payload as any))
         .toThrowError('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
@@ -24,7 +24,7 @@ describe('AddReply entities', () => {
     };
 
     // Action & Assert
-    expect(() => new AddReply(payload))
+    expect(() => new AddReply(payload as any))
         .toThrowError('ADD_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 

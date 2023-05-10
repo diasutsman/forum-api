@@ -1,11 +1,10 @@
-const ThreadsTableTestHelper =
-require('../../../../tests/ThreadsTableTestHelper');
-const pool = require('../../database/postgres/pool');
-const AddThread = require('../../../Domains/threads/entities/AddThread');
-const AddedThread = require('../../../Domains/threads/entities/AddedThread');
-const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
-const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
-const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
+import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper';
+import pool from '../../database/postgres/pool';
+import AddThread from '../../../Domains/threads/entities/AddThread';
+import AddedThread from '../../../Domains/threads/entities/AddedThread';
+import ThreadRepositoryPostgres from '../ThreadRepositoryPostgres';
+import NotFoundError from '../../../Commons/exceptions/NotFoundError';
+import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
 
 describe('ThreadRepositoryPostgres postgres', () => {
   afterEach(async () => {
@@ -77,7 +76,7 @@ describe('ThreadRepositoryPostgres postgres', () => {
   describe('getThreadById function', () => {
     it('should throw error when thread not found', async () => {
       // Arrange
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {} as any);
 
       // Action & Assert
       await expect(threadRepositoryPostgres.getThreadById('thread-123'))
@@ -94,10 +93,10 @@ describe('ThreadRepositoryPostgres postgres', () => {
         title: 'title',
         body: 'body',
         owner: 'user-123',
-        date: date,
+        date: date.toISOString(),
       });
 
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {} as any);
 
       // Action
       const thread = await threadRepositoryPostgres.getThreadById('thread-123');

@@ -6,7 +6,7 @@ class AuthenticationRepository {
    * @param {string} token
    * @memberof AuthenticationRepository
    */
-  async addToken(token) {
+  async addToken(token: string) {
     throw new Error('AUTHENTICATION_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
@@ -14,7 +14,7 @@ class AuthenticationRepository {
    * @param {string} token
    * @memberof AuthenticationRepository
    */
-  async checkAvailabilityToken(token) {
+  async checkAvailabilityToken(token: string) {
     throw new Error('AUTHENTICATION_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
@@ -22,9 +22,9 @@ class AuthenticationRepository {
    * @param {string} token
    * @memberof AuthenticationRepository
    */
-  async deleteToken(token) {
+  async deleteToken(token: string) {
     throw new Error('AUTHENTICATION_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 }
 
-module.exports = AuthenticationRepository;
+export default AuthenticationRepository;

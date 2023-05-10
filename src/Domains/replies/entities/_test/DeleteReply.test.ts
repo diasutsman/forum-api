@@ -1,4 +1,4 @@
-const DeleteReply = require('../DeleteReply');
+import DeleteReply from '../DeleteReply';
 
 describe('DeleteReply entities', () => {
   it('should throw error when payload not contain needed property', () => {
@@ -10,7 +10,7 @@ describe('DeleteReply entities', () => {
     };
 
     // Action & Assert
-    expect(() => new DeleteReply(payload))
+    expect(() => new DeleteReply(payload as any))
         .toThrowError('DELETE_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
@@ -24,7 +24,7 @@ describe('DeleteReply entities', () => {
     };
 
     // Action & Assert
-    expect(() => new DeleteReply(payload))
+    expect(() => new DeleteReply(payload as any))
         .toThrowError('DELETE_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 

@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-const {Pool} = require('pg');
+import { Pool, PoolConfig } from 'pg';
 
 const testConfig = {
   host: process.env.PGHOST_TEST,
@@ -7,10 +7,10 @@ const testConfig = {
   user: process.env.PGUSER_TEST,
   password: process.env.PGPASSWORD_TEST,
   database: process.env.PGDATABASE_TEST,
-};
+} as PoolConfig;
 
 const pool = process.env.NODE_ENV === 'test' ?
                         new Pool(testConfig) :
                         new Pool();
 
-module.exports = pool;
+export default pool;

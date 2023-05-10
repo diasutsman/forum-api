@@ -1,11 +1,10 @@
-const ReplyUseCase = require('../ReplyUseCase');
-const AddedReply = require('../../../Domains/replies/entities/AddedReply');
-const ReplyRepository = require('../../../Domains/replies/ReplyRepository');
-const CommentRepository =
-    require('../../../Domains/comments/CommentRepository');
-const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
-const AddReply = require('../../../Domains/replies/entities/AddReply');
-const DeleteReply = require('../../../Domains/replies/entities/DeleteReply');
+import ReplyUseCase from '../ReplyUseCase';
+import AddedReply from '../../../Domains/replies/entities/AddedReply';
+import ReplyRepository from '../../../Domains/replies/ReplyRepository';
+import CommentRepository from '../../../Domains/comments/CommentRepository';
+import ThreadRepository from '../../../Domains/threads/ThreadRepository';
+import AddReply from '../../../Domains/replies/entities/AddReply';
+import DeleteReply from '../../../Domains/replies/entities/DeleteReply';
 
 describe('ReplyUseCase', () => {
   /**

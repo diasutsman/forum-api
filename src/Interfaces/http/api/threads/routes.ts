@@ -1,14 +1,12 @@
-/**
- * @typedef {import('./handler')} ThreadsHandler
- * @typedef {import('@hapi/hapi').ServerRoute} ServerRoute
- */
+import { ServerRoute, ReqRefDefaults } from '@hapi/hapi';
+import Handler from './handler';
 
 /**
  *
- * @param {ThreadsHandler} handler
+ * @param {Handler} handler
  * @return {ServerRoute[]}
  */
-const routes = (handler) => ([
+const routes = (handler: Handler): ServerRoute<ReqRefDefaults> | ServerRoute<ReqRefDefaults>[] => ([
   {
     method: 'POST',
     path: '/threads',
@@ -56,4 +54,4 @@ const routes = (handler) => ([
   },
 ]);
 
-module.exports = routes;
+export default routes;

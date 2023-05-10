@@ -1,17 +1,21 @@
+type Payload = {
+    accessToken: string;
+    refreshToken: string;
+}
+
 /**
  * @class NewAuth
  */
 class NewAuth {
+  accessToken: string;
+  refreshToken: string;
   /**
    * Creates an instance of NewAuth.
-   * @param {{
-   *  accessToken: string,
-   *  refreshToken: string
-   * }} payload
+   * @param {Payload} payload
    * @memberof NewAuth
    */
-  constructor(payload) {
-    this._verifyPayload(payload);
+  constructor(payload: Payload) {
+    NewAuth._verifyPayload(payload);
 
     this.accessToken = payload.accessToken;
     this.refreshToken = payload.refreshToken;
@@ -24,7 +28,7 @@ class NewAuth {
    * }} payload
    * @memberof NewAuth
    */
-  _verifyPayload(payload) {
+  private static _verifyPayload(payload: Payload) {
     const {accessToken, refreshToken} = payload;
 
     if (!accessToken || !refreshToken) {
@@ -37,4 +41,4 @@ class NewAuth {
   }
 }
 
-module.exports = NewAuth;
+export default NewAuth;

@@ -1,4 +1,4 @@
-const CommentRepository = require('../CommentRepository');
+import CommentRepository from '../CommentRepository';
 
 describe('CommentRepository interface', () => {
   it('should throw error when invoke unimplemented method', async () => {
@@ -6,13 +6,13 @@ describe('CommentRepository interface', () => {
     const commentRepository = new CommentRepository();
 
     // Action & Assert
-    await expect(commentRepository.addComment({}))
+    await expect(commentRepository.addComment({} as any))
         .rejects.toThrowError('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
-    await expect(commentRepository.deleteComment({}))
+    await expect(commentRepository.deleteComment({} as any))
         .rejects.toThrowError('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
-    await expect(commentRepository.getThreadComments({}))
+    await expect(commentRepository.getThreadComments({} as any))
         .rejects.toThrowError('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
-    await expect(commentRepository.verifyCommentExists({}))
+    await expect(commentRepository.verifyCommentExists({} as any))
         .rejects.toThrowError('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
 });

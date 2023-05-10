@@ -1,27 +1,30 @@
-/**
- * @typedef {import('../../Domains/authentications/AuthenticationRepository')
- * } AuthenticationRepository
- * @typedef {import('../../Applications/security/AuthenticationTokenManager')
- * } AuthenticationTokenManager
- */
+import {RefreshPayload} from 'src/Commons/types';
+import AuthenticationRepository
+  from 'src/Domains/authentications/AuthenticationRepository';
+import AuthenticationTokenManager from '../security/AuthenticationTokenManager';
+
+type Dependencies = {
+  authenticationRepository: AuthenticationRepository;
+  authenticationTokenManager: AuthenticationTokenManager;
+}
+
 /**
  *
  *
  * @class RefreshAuthenticationUseCase
  */
 class RefreshAuthenticationUseCase {
+  private _authenticationRepository: AuthenticationRepository;
+  private _authenticationTokenManager: AuthenticationTokenManager;
   /**
    * Creates an instance of RefreshAuthenticationUseCase.
-   * @param {{
-   *  authenticationRepository: AuthenticationRepository,
-   *  authenticationTokenManager: AuthenticationTokenManager,
-   * }} params
+   * @param {Dependencies} params
    * @memberof RefreshAuthenticationUseCase
    */
   constructor({
     authenticationRepository,
     authenticationTokenManager,
-  }) {
+  }: Dependencies) {
     this._authenticationRepository = authenticationRepository;
     this._authenticationTokenManager = authenticationTokenManager;
   }
@@ -33,7 +36,7 @@ class RefreshAuthenticationUseCase {
    * @return {Promise<string>}
    * @memberof RefreshAuthenticationUseCase
    */
-  async execute(useCasePayload) {
+  async execute(useCasePayload: RefreshPayload) {
     this._verifyPayload(useCasePayload);
     const {refreshToken} = useCasePayload;
 
@@ -48,12 +51,10 @@ class RefreshAuthenticationUseCase {
   }
 
   /**
-   *
-   *
-   * @param {*} payload
+   * @param {RefreshPayload} payload
    * @memberof RefreshAuthenticationUseCase
    */
-  _verifyPayload(payload) {
+  _verifyPayload(payload: RefreshPayload) {
     const {refreshToken} = payload;
 
     if (!refreshToken) {
@@ -71,4 +72,4 @@ class RefreshAuthenticationUseCase {
   }
 }
 
-module.exports = RefreshAuthenticationUseCase;
+export default RefreshAuthenticationUseCase;

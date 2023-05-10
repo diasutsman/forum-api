@@ -1,40 +1,47 @@
-/**
- * @typedef {import('../../Domains/threads/ThreadRepository')} ThreadRepository
- * @typedef {import('../../Domains/comments/CommentRepository')
- * } CommentRepository
- * @typedef {import('../../Domains/replies/ReplyRepository')} ReplyRepository
- * @typedef {import('../../Domains/threads/entities/AddedThread')} AddedThread
-*/
-const AddThread = require('../../Domains/threads/entities/AddThread');
+import ThreadRepository from 'src/Domains/threads/ThreadRepository';
+import AddThread from '../../Domains/threads/entities/AddThread';
+import CommentRepository from 'src/Domains/comments/CommentRepository';
+import ReplyRepository from 'src/Domains/replies/ReplyRepository';
+
+type Dependencies = {
+    threadRepository: ThreadRepository;
+    commentRepository: CommentRepository
+    replyRepository: ReplyRepository
+}
+
+type NewThread = {
+    title: string;
+    body: string;
+    date: string;
+    owner: string;
+}
 
 /**
  * @class ThreadUseCase
  */
 class ThreadUseCase {
+  private _threadRepository: ThreadRepository;
+  private _commentRepository: CommentRepository;
+  private _replyRepository: ReplyRepository;
   /**
-   * @param {{
-   *  threadRepository: ThreadRepository,
-   *  commentRepository: CommentRepository,
-   *  replyRepository: ReplyRepository,
-   * }} params
+   * @param {Dependencies} params
    */
-  constructor({threadRepository, commentRepository, replyRepository}) {
+  constructor({
+    threadRepository,
+    commentRepository,
+    replyRepository,
+  }: Dependencies) {
     this._threadRepository = threadRepository;
     this._commentRepository = commentRepository;
     this._replyRepository = replyRepository;
   }
 
   /**
-   * @param {{
-   *  title: string,
-   *  body: string,
-   *  date: string,
-   *  owner: string,
-   * }} useCasePayload
+   * @param {NewThread} useCasePayload
    * @return {Promise<AddedThread>}
    * @memberof ThreadUseCase
    */
-  async addThread(useCasePayload) {
+  async addThread(useCasePayload: NewThread) {
     const addedThread = await this._threadRepository.addThread(new AddThread({
       ...useCasePayload,
     }));
@@ -53,7 +60,7 @@ class ThreadUseCase {
    * }>}
    * @memberof ThreadUseCase
    */
-  async getThreadById(id) {
+  async getThreadById(id: string) {
     const thread = await this._threadRepository.getThreadById(id);
     const comments = await this._commentRepository.getThreadComments(id);
     return {
@@ -63,7 +70,7 @@ class ThreadUseCase {
       date: thread.date,
       username: thread.username,
       comments: await Promise.all(comments.map(
-          async (comment) => {
+          async (comment: any) => {
             const replies = await this._replyRepository
                 .getCommentReplies(comment.id);
             return {
@@ -73,7 +80,7 @@ class ThreadUseCase {
               comment.content,
               date: comment.date.toISOString(),
               username: comment.username,
-              replies: replies.map((reply) => ({
+              replies: replies.map((reply: any) => ({
                 id: reply.id,
                 content: reply.is_delete ?
               '**balasan telah dihapus**' :
@@ -89,4 +96,4 @@ class ThreadUseCase {
   }
 }
 
-module.exports = ThreadUseCase;
+export default ThreadUseCase;

@@ -1,4 +1,4 @@
-const RegisteredUser = require('../RegisteredUser');
+import RegisteredUser from '../RegisteredUser';
 
 describe('a RegisteredUser entities', () => {
   it('should throw error when payload did not contain needed property', () => {
@@ -9,7 +9,7 @@ describe('a RegisteredUser entities', () => {
     };
 
     // Action and Assert
-    expect(() => new RegisteredUser(payload))
+    expect(() => new RegisteredUser(payload as any))
         .toThrowError('REGISTERED_USER.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
@@ -23,7 +23,7 @@ describe('a RegisteredUser entities', () => {
         };
 
         // Action and Assert
-        expect(() => new RegisteredUser(payload))
+        expect(() => new RegisteredUser(payload as any))
             .toThrowError('REGISTERED_USER.NOT_MEET_DATA_TYPE_SPECIFICATION');
       });
 

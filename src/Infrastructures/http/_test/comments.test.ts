@@ -1,13 +1,10 @@
-const pool = require('../../database/postgres/pool');
-const container = require('../../container');
-const createServer = require('../createServer');
-const ThreadsTableTestHelper =
-require('../../../../tests/ThreadsTableTestHelper');
-const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
-const AuthenticationTokenManager =
-require('../../../Applications/security/AuthenticationTokenManager');
-const CommentsTableTestHelper =
-require('../../../../tests/CommentsTableTestHelper');
+import pool from '../../database/postgres/pool';
+import container from '../../container';
+import createServer from '../createServer';
+import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper';
+import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
+import AuthenticationTokenManager from '../../../Applications/security/AuthenticationTokenManager';
+import CommentsTableTestHelper from '../../../../tests/CommentsTableTestHelper';
 
 describe('/threads endpoint', () => {
   afterAll(async () => {

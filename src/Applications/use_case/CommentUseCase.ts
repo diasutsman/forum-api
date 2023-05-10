@@ -1,37 +1,45 @@
-/**
- * @typedef {import('../../Domains/comments/CommentRepository')
- * } CommentRepository
- * @typedef {import('../../Domains/threads/ThreadRepository')} ThreadRepository
- * @typedef {import('../../Domains/comments/entities/AddedComment')
- * } AddedComment
- */
-const AddComment = require('../../Domains/comments/entities/AddComment');
+import CommentRepository from '../../Domains/comments/CommentRepository';
+import AddComment from '../../Domains/comments/entities/AddComment';
+import ThreadRepository from '../../Domains/threads/ThreadRepository';
+import DeleteComment from '../../Domains/comments/entities/DeleteComment';
+
+type Dependencies = {
+  commentRepository: CommentRepository;
+  threadRepository: ThreadRepository;
+}
+
+type AddPayload = {
+  content: string;
+  owner: string;
+  threadId: string;
+  date: string | null | undefined;
+}
+
+type DeletePayload = {
+  threadId: string;
+  commentId: string;
+  owner: string;
+}
 
 /**
  * CommentUseCase
  */
 class CommentUseCase {
+  private _commentRepository: CommentRepository;
+  private _threadRepository: ThreadRepository;
   /**
-   * @param {{
-   *  commentRepository: CommentRepository,
-   * threadRepository: ThreadRepository
-   * }} params
+   * @param {Dependencies} params
    */
-  constructor({commentRepository, threadRepository}) {
+  constructor({commentRepository, threadRepository}: Dependencies) {
     this._commentRepository = commentRepository;
     this._threadRepository = threadRepository;
   }
 
   /**
-   * @param {{
-   *  content: string,
-   *  threadId: string,
-   *  owner: string,
-   *  date: string,
-   * }} useCasePayload
+   * @param {AddPayload} useCasePayload
    * @return {Promise<AddedComment>}
    */
-  async addComment(useCasePayload) {
+  async addComment(useCasePayload: AddPayload) {
     await this._threadRepository.verifyThreadAvailability(
         useCasePayload.threadId,
     );
@@ -43,19 +51,16 @@ class CommentUseCase {
   }
 
   /**
-   * @param {{
-   *  threadId: string,
-   *  commentId: string,
-   *  owner: string,
-   * }} useCasePayload
+   * @param {DeletePayload} useCasePayload
    */
-  async deleteComment(useCasePayload) {
+  async deleteComment(useCasePayload: DeletePayload) {
+    const validatePayload = new DeleteComment(useCasePayload);
     await this._threadRepository.verifyThreadAvailability(
         useCasePayload.threadId,
     );
 
-    await this._commentRepository.deleteComment(useCasePayload);
+    await this._commentRepository.deleteComment(validatePayload);
   }
 }
 
-module.exports = CommentUseCase;
+export default CommentUseCase;

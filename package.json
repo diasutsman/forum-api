@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app.js",
-    "start:dev": "nodemon src/app.js",
+    "start": "npx tsc && node ./dist/src/app.js",
+    "start:dev": "nodemon ./src/app.ts",
     "test": "jest --setupFiles dotenv/config -i",
     "test:watch:change": "jest --watch --setupFiles dotenv/config -i",
     "test:watch": "jest --watchAll --coverage --setupFiles dotenv/config -i",
     "migrate": "node-pg-migrate",
     "migrate:test": "node-pg-migrate -f config/database/test.json",
-    "lint": "eslint . --fix"
+    "lint": "eslint --ext .ts --fix ."
   },
   "keywords": [],
   "author": "",
@@ -30,7 +30,7 @@
     "@jest/globals": "^29.3.1",
     "@types/bcrypt": "^5.0.0",
     "@types/hapi__hapi": "^20.0.13",
-    "@types/hapi__jwt": "^2.0.1",
+    "@types/hapi__jwt": "^2.0.2",
     "@types/jest": "^29.2.3",
     "@types/node": "^18.11.10",
     "@typescript-eslint/eslint-plugin": "^5.59.2",

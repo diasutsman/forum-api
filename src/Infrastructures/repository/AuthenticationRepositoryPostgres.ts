@@ -1,21 +1,20 @@
-/**
- * @typedef {import('../database/postgres/pool')} Pool
- */
-const InvariantError = require('../../Commons/exceptions/InvariantError');
-const AuthenticationRepository =
-require('../../Domains/authentications/AuthenticationRepository');
+import { Pool } from 'pg';
+
+import InvariantError from '../../Commons/exceptions/InvariantError';
+import AuthenticationRepository from '../../Domains/authentications/AuthenticationRepository';
 
 /**
  * @class AuthenticationRepositoryPostgres
  * @extends {AuthenticationRepository}
  */
 class AuthenticationRepositoryPostgres extends AuthenticationRepository {
+  private _pool: any;
   /**
    * Creates an instance of AuthenticationRepositoryPostgres.
    * @param {Pool} pool
    * @memberof AuthenticationRepositoryPostgres
    */
-  constructor(pool) {
+  constructor(pool: Pool) {
     super();
     this._pool = pool;
   }
@@ -24,7 +23,7 @@ class AuthenticationRepositoryPostgres extends AuthenticationRepository {
    * @param {string} token
    * @memberof AuthenticationRepositoryPostgres
    */
-  async addToken(token) {
+  async addToken(token: string) {
     const query = {
       text: 'INSERT INTO authentications VALUES ($1)',
       values: [token],
@@ -37,7 +36,7 @@ class AuthenticationRepositoryPostgres extends AuthenticationRepository {
    * @param {string} token
    * @memberof AuthenticationRepositoryPostgres
    */
-  async checkAvailabilityToken(token) {
+  async checkAvailabilityToken(token: string) {
     const query = {
       text: 'SELECT * FROM authentications WHERE token = $1',
       values: [token],
@@ -54,7 +53,7 @@ class AuthenticationRepositoryPostgres extends AuthenticationRepository {
    * @param {string} token
    * @memberof AuthenticationRepositoryPostgres
    */
-  async deleteToken(token) {
+  async deleteToken(token: string) {
     const query = {
       text: 'DELETE FROM authentications WHERE token = $1',
       values: [token],
@@ -64,4 +63,4 @@ class AuthenticationRepositoryPostgres extends AuthenticationRepository {
   }
 }
 
-module.exports = AuthenticationRepositoryPostgres;
+export default AuthenticationRepositoryPostgres;
