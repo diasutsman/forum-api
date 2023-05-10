@@ -9,6 +9,13 @@ const RepliesTableTestHelper = {
     date = new Date().toISOString(),
     threadId = 'thread-123',
     commentId = 'comment-123',
+  }: {
+    id?: string;
+    content?: string;
+    owner?: string;
+    date?: string | Date;
+    threadId?: string;
+    commentId?: string;
   }) {
     const query = {
       text: 'INSERT INTO replies VALUES($1, $2, $3, $4, $5, $6)',

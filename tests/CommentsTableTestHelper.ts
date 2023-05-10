@@ -8,6 +8,12 @@ const CommentsTableTestHelper = {
     owner = 'user-123',
     date = new Date().toISOString(),
     threadId = 'thread-123',
+  }: {
+    id?: string,
+    content? : string,
+    owner? : string,
+    date? : string | Date,
+    threadId? : string,
   }) {
     const query = {
       text: 'INSERT INTO comments VALUES($1, $2, $3, $4, $5)',

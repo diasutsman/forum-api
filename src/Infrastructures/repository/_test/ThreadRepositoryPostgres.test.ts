@@ -93,7 +93,7 @@ describe('ThreadRepositoryPostgres postgres', () => {
         title: 'title',
         body: 'body',
         owner: 'user-123',
-        date: date.toISOString(),
+        date: date,
       });
 
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {} as any);

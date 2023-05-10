@@ -172,7 +172,7 @@ describe('CommentRepositoryPostgres postgres', () => {
       await CommentsTableTestHelper.addComment({
         id: 'comment-123',
         content: 'content',
-        date: date.toISOString(),
+        date: date,
         threadId: 'thread-123',
         owner: 'user-123',
       });

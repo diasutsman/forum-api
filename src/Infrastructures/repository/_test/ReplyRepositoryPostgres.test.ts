@@ -157,7 +157,7 @@ describe('ReplyRepositoryPostgres postgres', () => {
         id: 'reply-123',
         content: 'reply',
         owner: 'user-123',
-        date: date.toISOString(),
+        date: date,
         commentId: 'comment-123',
         threadId: 'thread-123',
       });
