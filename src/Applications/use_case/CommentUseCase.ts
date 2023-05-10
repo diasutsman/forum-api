@@ -2,6 +2,8 @@ import CommentRepository from '../../Domains/comments/CommentRepository';
 import AddComment from '../../Domains/comments/entities/AddComment';
 import ThreadRepository from '../../Domains/threads/ThreadRepository';
 import DeleteComment from '../../Domains/comments/entities/DeleteComment';
+import ToggleLikeComment from "../../Domains/comments/entities/ToggleLikeComment";
+import { CommentLikePayload } from 'src/Commons/types';
 
 type Dependencies = {
   commentRepository: CommentRepository;
@@ -61,6 +63,26 @@ class CommentUseCase {
 
     await this._commentRepository.deleteComment(validatePayload);
   }
+
+	/**
+	 * @param {{
+	 *  threadId: string,
+	 *  commentId: string,
+	 *  userId: string,
+	 * }} useCasePayload
+	 */
+	async toggleLike(useCasePayload: CommentLikePayload) {
+		const toggleLikeComment = new ToggleLikeComment(useCasePayload);
+		await this._threadRepository.verifyThreadAvailability(
+			toggleLikeComment.threadId
+		);
+
+		await this._commentRepository.verifyCommentExists(
+			toggleLikeComment.commentId
+		);
+
+		await this._commentRepository.toggleLike(toggleLikeComment);
+	}
 }
 
 export default CommentUseCase;

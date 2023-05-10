@@ -2,8 +2,6 @@ import AddThread from './entities/AddThread';
 import AddedThread from './entities/AddedThread';
 
 /**
- *
- *
  * @class ThreadRepository
  */
 class ThreadRepository {

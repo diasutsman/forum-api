@@ -1,3 +1,4 @@
+
 import CommentRepository from '../../../Domains/comments/CommentRepository';
 import ThreadRepository from '../../../Domains/threads/ThreadRepository';
 import AddComment from '../../../Domains/comments/entities/AddComment';
@@ -5,6 +6,8 @@ import AddedComment from '../../../Domains/comments/entities/AddedComment';
 import DeleteComment from '../../../Domains/comments/entities/DeleteComment';
 import CommentUseCase from '../CommentUseCase';
 import NotFoundError from '../../../Commons/exceptions/NotFoundError';
+import ToggleLikeComment 
+from '../../../Domains/comments/entities/ToggleLikeComment';
 
 describe('CommentUseCase', () => {
   /**
@@ -164,6 +167,48 @@ describe('CommentUseCase', () => {
       // Action & Assert
       await expect(commentUseCase.deleteComment(useCasePayload as any))
           .rejects.toThrowError('thread tidak ditemukan');
+      expect(mockThreadRepository.verifyThreadAvailability)
+          .toBeCalledWith(useCasePayload.threadId);
+    });
+  });
+
+  describe('toggleLike', () => {
+    it('should orchestrating like comment action correctly', async () => {
+      // Arrange
+      const useCasePayload = {
+        threadId: 'thread-123',
+        commentId: 'comment-123',
+        userId: 'user-123',
+      };
+
+      /** creating dependency of use case */
+      const mockCommentRepository = new CommentRepository();
+      const mockThreadRepository = new ThreadRepository();
+
+      /** mocking needed function */
+      mockThreadRepository.verifyThreadAvailability = jest.fn()
+          .mockImplementation(() => Promise.resolve());
+      mockCommentRepository.toggleLike = jest.fn()
+          .mockImplementation(() => Promise.resolve());
+      mockCommentRepository.verifyCommentExists = jest.fn()
+          .mockImplementation(() => Promise.resolve());
+
+      /** creating use case instance */
+      const commentUseCase = new CommentUseCase({
+        commentRepository: mockCommentRepository,
+        threadRepository: mockThreadRepository,
+      });
+
+      // Action
+      await commentUseCase.toggleLike(useCasePayload);
+
+      // Assert
+      expect(mockCommentRepository.toggleLike)
+          .toBeCalledWith(new ToggleLikeComment({
+            threadId: useCasePayload.threadId,
+            commentId: useCasePayload.commentId,
+            userId: useCasePayload.userId,
+          }));
       expect(mockThreadRepository.verifyThreadAvailability)
           .toBeCalledWith(useCasePayload.threadId);
     });

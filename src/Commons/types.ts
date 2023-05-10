@@ -52,9 +52,9 @@ export type TokenPayload = {
 };
 
 export type CommentLikePayload = {
-  threadId?: string;
-  commentId?: string;
-  userId?: string;
+  threadId: string;
+  commentId: string;
+  userId: string;
 };
 export type Payload = { [key: string]: unknown };
 

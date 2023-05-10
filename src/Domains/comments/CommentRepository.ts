@@ -1,3 +1,4 @@
+import { CommentLikePayload } from 'src/Commons/types';
 import AddComment from './entities/AddComment';
 import AddedComment from './entities/AddedComment';
 import DeleteComment from './entities/DeleteComment';
@@ -34,6 +35,21 @@ class CommentRepository {
    * @memberof CommentRepository
    */
   async verifyCommentExists(id: string): Promise<any> {
+    throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
+  /**
+   * @param {string} payload
+   * @memberof CommentRepository
+   */
+  async toggleLike(payload: CommentLikePayload) {
+    throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
+  /**
+   * @param {string} commentId
+   * @param {string} owner
+   * @memberof CommentRepository
+   */
+  async verifyCommentOwner(commentId: string, owner: string) {
     throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 }

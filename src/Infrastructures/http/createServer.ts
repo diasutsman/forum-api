@@ -5,6 +5,9 @@ import Jwt from '@hapi/jwt';
 import users from '../../Interfaces/http/api/users';
 import authentications from '../../Interfaces/http/api/authentications';
 import threads from '../../Interfaces/http/api/threads';
+import comments from '../../Interfaces/http/api/comments';
+import replies from '../../Interfaces/http/api/replies';
+import likes from '../../Interfaces/http/api/likes';
 
 // Error Handler
 import ClientError from '../../Commons/exceptions/ClientError';
@@ -56,6 +59,18 @@ const createServer = async (container: Container) => {
     },
     {
       plugin: threads,
+      options: {container},
+    },
+    {
+      plugin: comments,
+      options: {container},
+    },
+    {
+      plugin: replies,
+      options: {container},
+    },
+    {
+      plugin: likes,
       options: {container},
     },
   ]);

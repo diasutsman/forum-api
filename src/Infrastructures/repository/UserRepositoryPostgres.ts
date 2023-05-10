@@ -42,7 +42,7 @@ class UserRepositoryPostgres extends UserRepository {
 
   /**
    * @param {RegisterUser} registerUser
-   * @return {RegisteredUser}
+   * @return {Promise<RegisteredUser>}
    * @memberof UserRepositoryPostgres
    */
   async addUser(registerUser: RegisterUser): Promise<RegisteredUser> {
@@ -64,9 +64,9 @@ class UserRepositoryPostgres extends UserRepository {
 
   /**
    * @param {string} username
-   * @return {{
+   * @return {Promise<{
    *  password: string,
-   * }}
+   * }>}
    * @memberof UserRepositoryPostgres
    */
   async getPasswordByUsername(username: string): Promise<string> {
@@ -86,7 +86,7 @@ class UserRepositoryPostgres extends UserRepository {
 
   /**
    * @param {string} username
-   * @return {string}
+   * @return {Promise<string>}
    * @memberof UserRepositoryPostgres
    */
   async getIdByUsername(username: string): Promise<string> {

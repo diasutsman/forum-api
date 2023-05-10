@@ -9,10 +9,10 @@ type Payload = {
  * @class AddComment
  */
 class AddComment {
-  content: any;
-  owner: any;
-  threadId: any;
-  date: any;
+  content: string;
+  owner: string;
+  threadId: string;
+  date: string;
   /**
    * Creates an instance of AddComment.
    * @param {Payload} payload

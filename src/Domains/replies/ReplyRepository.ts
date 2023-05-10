@@ -31,5 +31,13 @@ class ReplyRepository {
   async getCommentReplies(commentId: string): Promise<any[]> {
     throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
+  /**
+   * @param {string} commentId
+   * @param {string} owner
+   * @memberof ReplyRepository
+   */
+  async verifyReplyOwner(commentId: string, owner: string) {
+    throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
 }
 export default ReplyRepository;
